@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -111,10 +111,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="HandleInformation.h" />
+    <ClInclude Include="ProcessInformation.h" />
+    <ClInclude Include="WinHandle.h" />
     <ClInclude Include="WinProcess.h" />
     <ClInclude Include="WinThread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HandleInformation.cpp" />
+    <ClCompile Include="ProcessInformation.cpp" />
+    <ClCompile Include="WinHandle.cpp" />
     <ClCompile Include="WinProcess.cpp" />
     <ClCompile Include="WinThread.cpp" />
   </ItemGroup>

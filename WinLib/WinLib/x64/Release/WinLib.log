@@ -1,3 +1,7 @@
-﻿  WinProcess.cpp
+﻿  HandleInformation.cpp
+  ProcessInformation.cpp
+  WinHandle.cpp
+WinHandle.cpp(41): warning C4018: '<': signed/unsigned mismatch
+  WinProcess.cpp
   WinThread.cpp
-  WinLib.vcxproj -> C:\Users\Thomas\Source\Repos\WinLib\WinLib\x64\Release\WinLib.lib
+  WinLib.vcxproj -> C:\Users\TomLadder\WinLib\WinLib\x64\Release\WinLib.lib

@@ -21,12 +21,30 @@
     <ClInclude Include="WinThread.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="ProcessInformation.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="WinHandle.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="HandleInformation.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinProcess.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="WinThread.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcessInformation.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="WinHandle.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="HandleInformation.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

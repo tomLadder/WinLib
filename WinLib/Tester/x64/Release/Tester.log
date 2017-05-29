@@ -1,6 +1,5 @@
-﻿  Code wird generiert.
-  2 of 105 functions ( 1.9%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
-  Codegenerierung ist abgeschlossen.
-  Tester.vcxproj -> C:\Users\Thomas\Source\Repos\WinLib\WinLib\x64\Release\Tester.exe
+﻿  EntryPoint.cpp
+  Generating code
+  All 141 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Tester.vcxproj -> C:\Users\TomLadder\WinLib\WinLib\x64\Release\Tester.exe

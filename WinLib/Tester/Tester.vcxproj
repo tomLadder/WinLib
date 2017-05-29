@@ -70,8 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Thomas\Source\Repos\WinLib\WinLib\WinLib;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Thomas\Source\Repos\WinLib\WinLib\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\TomLadder\WinLib\WinLib\WinLib;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\TomLadder\WinLib\WinLib\x64\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\TomLadder\WinLib\WinLib\WinLib;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\TomLadder\WinLib\WinLib\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -100,6 +104,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>WinLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
