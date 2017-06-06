@@ -38,6 +38,6 @@ namespace WinLib {
 	public:
 		static WinHandle* getInstance();
 
-		std::vector<std::shared_ptr<HandleInformation>> getHandle(DWORD pid, DWORD access_mask);
+		std::vector<std::shared_ptr<HandleInformation>> getHandle(DWORD pid, DWORD access_mask, bool ownOnly);
 	};
 };

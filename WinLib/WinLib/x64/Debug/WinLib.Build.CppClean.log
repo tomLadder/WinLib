@@ -1,6 +1,10 @@
 c:\users\tomladder\winlib\winlib\winlib\x64\debug\winlib.pdb
 c:\users\tomladder\winlib\winlib\winlib\x64\debug\winlib.idb
 c:\users\tomladder\winlib\winlib\winlib\x64\debug\handleinformation.obj
+c:\users\tomladder\winlib\winlib\winlib\x64\debug\loadlibinjection.obj
+c:\users\tomladder\winlib\winlib\winlib\x64\debug\mmap.obj
+c:\users\tomladder\winlib\winlib\winlib\x64\debug\peanalyser.obj
+c:\users\tomladder\winlib\winlib\winlib\x64\debug\pefile.obj
 c:\users\tomladder\winlib\winlib\winlib\x64\debug\processinformation.obj
 c:\users\tomladder\winlib\winlib\winlib\x64\debug\winhandle.obj
 c:\users\tomladder\winlib\winlib\winlib\x64\debug\winprocess.obj

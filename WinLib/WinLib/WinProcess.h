@@ -13,6 +13,7 @@ using WinLib::ProcessInformation;
 namespace WinLib {
 	class WinProcess {
 	public:
+		static DWORD findProcessId(const std::string& processName);
 		static std::vector<std::shared_ptr<ProcessInformation>> getProcesses();
 	};
 };

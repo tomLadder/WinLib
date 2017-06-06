@@ -1,0 +1,12 @@
+﻿  HandleInformation.cpp
+  LoadLibInjection.cpp
+  MMap.cpp
+  PEAnalyser.cpp
+PEAnalyser.cpp(12): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+  PEFile.cpp
+  ProcessInformation.cpp
+  WinHandle.cpp
+WinHandle.cpp(38): warning C4018: '<': signed/unsigned mismatch
+  WinProcess.cpp
+  WinThread.cpp
+  WinLib.vcxproj -> C:\Users\TomLadder\WinLib\WinLib\x64\Release\WinLib.lib

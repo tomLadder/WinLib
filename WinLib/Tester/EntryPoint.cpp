@@ -1,8 +1,11 @@
 #include <Windows.h>
 #include <iostream>
+#include <LoadLibInjection.h>
 #include <WinHandle.h>
+#include <PEFile.h>
 
-using WinLib::WinHandle;
+using WinLib::PE::Loader::LoadLibInjection;
+using WinLib::PE::PEFile;
 
 BOOL SetPrivilege(
 	HANDLE hToken,          // token handle
@@ -96,14 +99,15 @@ BOOL SetPrivilege(
 int main(int argc, char **argv) {
 	adjustPrivileges();
 
-	auto handles = WinHandle::getInstance()->getHandle(7532, PROCESS_ALL_ACCESS);
+	//if (LoadLibInjection::getInstance()->inject(536, std::string("C:\\Users\\TomLadder\\MMap\\MMap\\x64\\Release\\HandleHijackMMap.dll"), LoadLibInjection::Type::RTLCREATEUSERTHREAD)) {
+	//	std::cout << "Injection success" << std::endl;
+	//}
+	//else {
+	//	std::cout << "Injection failed" << std::endl;
+	//}
 
-	for (auto handle : handles) {
-		std::cout << "HOST-PID: " << handle->getHostPid() << std::endl;
-		std::cout << "HANDLE-PID: " << handle->getHandlePid() << std::endl;
-	}
-
-	std::cout << "Finished!" << std::endl;
+	auto pe = PEFile::PEFile();
+	std::cout << std::hex << (uint64_t) pe.getCodeBase() << std::endl;
 
 	getchar();
 	return 0;

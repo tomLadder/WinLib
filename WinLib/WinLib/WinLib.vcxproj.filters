@@ -13,6 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\PE">
+      <UniqueIdentifier>{bbd7db13-1cbe-466d-8662-a5c73f178f56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\PE">
+      <UniqueIdentifier>{af94e2f3-0766-482d-a4ab-1139b8e6740d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PE\Loader">
+      <UniqueIdentifier>{e0bd8246-8a6d-41f0-8a43-f75e5423c94e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\PE\Loader">
+      <UniqueIdentifier>{65a106e4-0fe0-4f62-90a7-d52da7bfa0ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Memory">
+      <UniqueIdentifier>{783d278d-36a1-4fe0-b65a-e7d3051239f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Memory">
+      <UniqueIdentifier>{1e83ea08-1ba5-48ae-a0fc-dbdbeaa50b1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Memory\Hook">
+      <UniqueIdentifier>{acbf351c-26c7-4c82-a8c7-decdb5bfdb61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Memory\Hook">
+      <UniqueIdentifier>{85cb34c5-20a3-46a4-807b-8fcd81966881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Output">
+      <UniqueIdentifier>{113207ac-9234-4218-a623-2b88abbf15c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Output">
+      <UniqueIdentifier>{8da756e2-cd54-4622-a0a7-787d468ba8ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WinProcess.h">
@@ -30,6 +60,33 @@
     <ClInclude Include="HandleInformation.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="PEFile.h">
+      <Filter>Headerdateien\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="PEAnalyser.h">
+      <Filter>Headerdateien\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="MMap.h">
+      <Filter>Headerdateien\PE\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="LoaderParamsMMap.h">
+      <Filter>Headerdateien\PE\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadLibInjection.h">
+      <Filter>Headerdateien\PE\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternScanner.h">
+      <Filter>Headerdateien\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Hook.h">
+      <Filter>Headerdateien\Memory\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour.h">
+      <Filter>Headerdateien\Memory\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Headerdateien\Output</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinProcess.cpp">
@@ -46,6 +103,30 @@
     </ClCompile>
     <ClCompile Include="HandleInformation.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="PEFile.cpp">
+      <Filter>Quelldateien\PE</Filter>
+    </ClCompile>
+    <ClCompile Include="PEAnalyser.cpp">
+      <Filter>Quelldateien\PE</Filter>
+    </ClCompile>
+    <ClCompile Include="MMap.cpp">
+      <Filter>Quelldateien\PE\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadLibInjection.cpp">
+      <Filter>Quelldateien\PE\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternScanner.cpp">
+      <Filter>Quelldateien\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook.cpp">
+      <Filter>Quelldateien\Memory\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour.cpp">
+      <Filter>Quelldateien\Memory\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Quelldateien\Output</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
