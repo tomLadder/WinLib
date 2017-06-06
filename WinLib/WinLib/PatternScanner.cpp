@@ -27,8 +27,13 @@ uint8_t* PatternScanner::search_internal(byte* start, int size, const char* patt
 	return nullptr;
 }
 
-uint8_t* PatternScanner::search(std::string moduleName) {
-	return nullptr;
+uint8_t* PatternScanner::search(std::string moduleName, const char* pattern, const char* mask) {
+	auto pe = PEFile::PEFile(moduleName);
+
+	auto start = pe.getCodeBase();
+	auto size = pe.getCodeSize();
+
+	return PatternScanner::search_internal(start, size, pattern, mask);
 }
 
 uint8_t* PatternScanner::search(const char* pattern, const char* mask) {
