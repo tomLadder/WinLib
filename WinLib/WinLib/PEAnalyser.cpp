@@ -9,7 +9,7 @@ PEFile* PEAnalyser::load(std::string path) {
 	std::ifstream stream(path, std::ifstream::binary);
 	if (stream) {
 		stream.seekg(0, stream.end);
-		int length = stream.tellg();
+		auto length = stream.tellg();
 		stream.seekg(0, stream.beg);
 
 		char* rawData = new char[length];

@@ -1,8 +1,16 @@
 ﻿  WinThread.cpp
   WinProcess.cpp
   WinHandle.cpp
-c:\users\tomladder\winlib\winlib\winlib\winhandle.cpp(39): warning C4018: '<': signed/unsigned mismatch
   ProcessInformation.cpp
+  PEFile.cpp
+  PEAnalyser.cpp
+c:\users\tomladder\winlib\winlib\winlib\peanalyser.cpp(20): warning C4244: 'argument': conversion from 'std::streamoff' to 'int', possible loss of data
+  PatternScanner.cpp
+  MMap.cpp
+  LoadLibInjection.cpp
+  Hook.cpp
   HandleInformation.cpp
+  Detour.cpp
+  Console.cpp
   Generating Code...
   WinLib.vcxproj -> C:\Users\TomLadder\WinLib\WinLib\x64\Debug\WinLib.lib

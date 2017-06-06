@@ -35,7 +35,7 @@ std::vector<std::shared_ptr<HandleInformation>> WinHandle::getHandle(DWORD pid, 
 
 	HANDLE copy = 0;
 
-	for (int i = 0; i < handleInfos->HandleCount; i++)
+	for(unsigned long i = 0; i < handleInfos->HandleCount; i++)
 	{
 		SYSTEM_HANDLE handleInfo = handleInfos->Handles[i];
 

@@ -3,9 +3,13 @@
 #include <LoadLibInjection.h>
 #include <WinHandle.h>
 #include <PEFile.h>
+#include <PatternScanner.h>
+#include <Detour.h>
 
 using WinLib::PE::Loader::LoadLibInjection;
 using WinLib::PE::PEFile;
+using WinLib::Mem::PatternScanner;
+using WinLib::Mem::Hook::Detour;
 
 BOOL SetPrivilege(
 	HANDLE hToken,          // token handle
@@ -96,19 +100,46 @@ BOOL SetPrivilege(
 	return TRUE;
 }
 
+void func();
+void func2();
+
+typedef void(*_func)();
+_func pfunc;
+
 int main(int argc, char **argv) {
 	adjustPrivileges();
 
-	//if (LoadLibInjection::getInstance()->inject(536, std::string("C:\\Users\\TomLadder\\MMap\\MMap\\x64\\Release\\HandleHijackMMap.dll"), LoadLibInjection::Type::RTLCREATEUSERTHREAD)) {
-	//	std::cout << "Injection success" << std::endl;
-	//}
-	//else {
-	//	std::cout << "Injection failed" << std::endl;
-	//}
+	func();
 
-	auto pe = PEFile::PEFile();
-	std::cout << std::hex << (uint64_t) pe.getCodeBase() << std::endl;
+	auto mask = "xxxxxxx????xxx????x????xxx????xxxxx????xxx?????xxx????";
+	auto pattern = "\x48\x83\xEC\x38\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\xC8\xFF\x15\x00\x00\x00\x00\xC7\x44\x24\x00\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00";
+
+	auto addr = PatternScanner::search(pattern, mask);
+
+	std::cout << std::hex << (uint64_t)addr << std::endl;
+
+	auto detour = new Detour(addr, (uint8_t*)&func2);
+	detour->hook();
+	pfunc = (_func)detour->getTrampoline();
+
+	std::cout << (uint64_t)detour->getTrampoline() << std::endl;
+
+	std::cout << "Press a key to continue" << std::endl;
+	getchar();
+	func();
 
 	getchar();
 	return 0;
+}
+
+void func() {
+	std::cout << "hello world" << std::endl;
+
+	int x = 24 * 232;
+	std::cout << "Addr: " << x << std::endl;
+}
+
+void func2() {
+	std::cout << "hooked" << std::endl;
+	pfunc();
 }
