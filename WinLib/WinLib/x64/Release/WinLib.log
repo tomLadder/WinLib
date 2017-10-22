@@ -12,4 +12,6 @@ PEAnalyser.cpp(20): warning C4244: 'argument': conversion from 'std::streamoff' 
   WinHandle.cpp
   WinProcess.cpp
   WinThread.cpp
-  WinLib.vcxproj -> C:\Users\TomLadder\WinLib\WinLib\x64\Release\WinLib.lib
+  Generating Code...
+  capstone.lib(AArch64BaseInfo.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+  WinLib.vcxproj -> C:\Dev\WinLib\WinLib\x64\Release\WinLib.lib
