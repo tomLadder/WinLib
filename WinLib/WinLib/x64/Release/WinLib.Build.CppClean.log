@@ -2,6 +2,7 @@ c:\dev\winlib\winlib\winlib\x64\release\winlib.pdb
 c:\dev\winlib\winlib\winlib\x64\release\winthread.obj
 c:\dev\winlib\winlib\winlib\x64\release\winprocess.obj
 c:\dev\winlib\winlib\winlib\x64\release\winhandle.obj
+c:\dev\winlib\winlib\winlib\x64\release\vmt.obj
 c:\dev\winlib\winlib\winlib\x64\release\processinformation.obj
 c:\dev\winlib\winlib\winlib\x64\release\pefile.obj
 c:\dev\winlib\winlib\winlib\x64\release\peanalyser.obj
@@ -16,6 +17,6 @@ c:\dev\winlib\winlib\x64\release\winlib.lib
 c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\cl.command.1.tlog
 c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\cl.read.1.tlog
 c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\cl.write.1.tlog
-c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\lib-link.read.1.tlog
-c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\lib-link.write.1.tlog
+c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\lib-link.10356.read.1.tlog
+c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\lib-link.10356.write.1.tlog
 c:\dev\winlib\winlib\winlib\x64\release\winlib.tlog\lib.command.1.tlog

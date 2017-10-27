@@ -128,6 +128,7 @@
     <ClInclude Include="PEAnalyser.h" />
     <ClInclude Include="PEFile.h" />
     <ClInclude Include="ProcessInformation.h" />
+    <ClInclude Include="Vmt.h" />
     <ClInclude Include="WinHandle.h" />
     <ClInclude Include="WinProcess.h" />
     <ClInclude Include="WinThread.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="PEAnalyser.cpp" />
     <ClCompile Include="PEFile.cpp" />
     <ClCompile Include="ProcessInformation.cpp" />
+    <ClCompile Include="Vmt.cpp" />
     <ClCompile Include="WinHandle.cpp" />
     <ClCompile Include="WinProcess.cpp" />
     <ClCompile Include="WinThread.cpp" />

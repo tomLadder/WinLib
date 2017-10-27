@@ -87,6 +87,9 @@
     <ClInclude Include="Console.h">
       <Filter>Headerdateien\Output</Filter>
     </ClInclude>
+    <ClInclude Include="Vmt.h">
+      <Filter>Headerdateien\Memory\Hook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinProcess.cpp">
@@ -127,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="Console.cpp">
       <Filter>Quelldateien\Output</Filter>
+    </ClCompile>
+    <ClCompile Include="Vmt.cpp">
+      <Filter>Quelldateien\Memory\Hook</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

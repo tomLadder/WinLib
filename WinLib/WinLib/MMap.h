@@ -3,6 +3,9 @@
 #include "PEFile.h"
 #include "LoaderParamsMMap.h"
 
+
+#define RVA	(m,b) ((PVOID)((ULONG_PTR)(b)+(ULONG_PTR)(m)))
+
 namespace WinLib {
 	namespace PE {
 		namespace Loader {

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <Windows.h>
 
 namespace WinLib {
@@ -17,6 +18,8 @@ namespace WinLib {
 			PEFile(char* rawData, int rawDatSize);
 			PEFile(const std::string& moduleName);
 			PEFile();
+
+			static PEFile* loadFromFile(const std::string& path);
 
 			bool isValid();
 			void printInfos();

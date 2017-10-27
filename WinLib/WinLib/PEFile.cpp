@@ -43,6 +43,28 @@ PEFile::PEFile(char* rawData, int rawDataSize) {
 	this->sectionBase = (byte*)this->sectionHeader + (sizeof(IMAGE_SECTION_HEADER) * this->getNumberOfSections());
 }
 
+PEFile* PEFile::loadFromFile(const std::string& path) {
+	std::ifstream ifs (path, std::ifstream::binary);
+
+	if (ifs) {
+		ifs.seekg(0, ifs.end);
+		auto size = ifs.tellg();
+		ifs.seekg(0, ifs.beg);
+
+		char* buffer = new char[size];
+
+		ifs.read(buffer, size);
+
+		ifs.close();
+
+		return new PEFile(buffer, size);
+	}
+	else {
+		//Improve exception handling!
+		return nullptr;
+	}
+}
+
 void PEFile::printInfos() {
 	std::cout << "EntryPoint:            0x" << std::hex << this->ntHeader->OptionalHeader.AddressOfEntryPoint << std::endl;
 	std::cout << "ImageBase:             0x" << std::hex << this->ntHeader->OptionalHeader.ImageBase << std::endl;

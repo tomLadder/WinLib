@@ -1,5 +1,6 @@
 #include "MMap.h"
 
+
 using WinLib::PE::Loader::MMapper;
 using WinLib::PE::PEFile;
 
@@ -51,8 +52,8 @@ bool MMapper::mapInternal(HANDLE processHandle) {
 
 	MMapper::mapHeader();
 	MMapper::mapSections();
-	MMapper::writeToProcess(processHandle, memory, this->peFile->getImageSize());
 	MMapper::baseRelocation();
+	MMapper::writeToProcess(processHandle, memory, this->peFile->getImageSize());
 	MMapper::setProtectionFlags();
 
 	if (!MMapper::executePayload(processHandle, memory)) {
@@ -92,8 +93,6 @@ bool MMapper::mapSections() {
 
 bool MMapper::executePayload(HANDLE processHandle, LPVOID peBase) {
 	int loaderStubSize = 200;
-	//int loaderStubSize = (intptr_t)&Stub - (intptr_t)&LoaderStub;
-	std::cout << "Size: " << loaderStubSize << std::endl;
 
 	LPVOID loaderMemory = VirtualAllocEx(processHandle, 0, loaderStubSize + sizeof(LoaderParamsMMap), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 
@@ -154,9 +153,21 @@ bool MMapper::writeToProcess(HANDLE processHandle, LPVOID memBase, int size) {
 
 bool MMapper::baseRelocation() {
 	//fix base relocs
+	ULONG count;
+	ULONG_PTR address;
+	PUSHORT typeOffset;
 
-	auto var = (PIMAGE_BASE_RELOCATION)((byte*)this->payload + this->peFile->getNtHeader()->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress);
-	std::cout << "Size of Block: " << std::hex << var->SizeOfBlock << std::endl;
+	auto dir = (PIMAGE_BASE_RELOCATION)((byte*)this->payload + this->peFile->getNtHeader()->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress);
+	auto dirend = dir + dir->SizeOfBlock;
+
+	while (dir < dirend && dir->SizeOfBlock > 0) {
+		count = dir->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION) / sizeof(USHORT);
+		//address = (ULONG_PTR)RVA(this->payload, dir->VirtualAddress);
+
+		//RVA(0, 0);
+
+		typeOffset = (PUSHORT)(dir + 1);
+	}
 
 	return true;
 }

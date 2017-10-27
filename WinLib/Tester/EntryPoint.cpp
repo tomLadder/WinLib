@@ -5,11 +5,16 @@
 #include <PEFile.h>
 #include <PatternScanner.h>
 #include <Detour.h>
+#include <Console.h>
+#include <MMap.h>
 
 using WinLib::PE::Loader::LoadLibInjection;
 using WinLib::PE::PEFile;
 using WinLib::Mem::PatternScanner;
 using WinLib::Mem::Hook::Detour;
+using WinLib::Output::Console;
+using WinLib::Output::LogType;
+using WinLib::PE::Loader::MMapper;
 
 BOOL SetPrivilege(
 	HANDLE hToken,          // token handle
@@ -106,27 +111,48 @@ void func2();
 typedef void(*_func)();
 _func pfunc;
 
+void manualmap() {
+	auto pe = PEFile::loadFromFile("C:\\Users\\Thomas\\source\\repos\\EmptyDll\\x64\\Release\\EmptyDll.dll");
+	if (pe) {
+		Console::printLog(LogType::DEBUG, "PEFile found");
+		
+		MMapper* mapper = new MMapper(pe);
+
+		if (mapper->map(2992)) {
+			Console::printLog(LogType::DEBUG, "PE mapped into target process");
+		}
+		else {
+			Console::printLog(LogType::WARN, "Could not mapp PE into target process");
+		}
+	}
+	else {
+		Console::printLog(LogType::WARN, "Could not read PE-File");
+	}
+}
+
 int main(int argc, char **argv) {
 	adjustPrivileges();
 
-	func();
+	manualmap();
 
-	auto mask = "xxxxxxx????xxx????x????xxx????xxxxx????xxx?????xxx????";
-	auto pattern = "\x48\x83\xEC\x38\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\xC8\xFF\x15\x00\x00\x00\x00\xC7\x44\x24\x00\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00";
+	//func();
 
-	auto addr = PatternScanner::search(pattern, mask);
+	//auto mask = "xxxxxxx????xxx????x????xxx????xxxxx????xxx?????xxx????";
+	//auto pattern = "\x48\x83\xEC\x38\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\xC8\xFF\x15\x00\x00\x00\x00\xC7\x44\x24\x00\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00";
 
-	std::cout << std::hex << (uint64_t)addr << std::endl;
+	//auto addr = PatternScanner::search(pattern, mask);
 
-	auto detour = new Detour(addr, (uint8_t*)&func2);
-	detour->hook();
-	pfunc = (_func)detour->getTrampoline();
+	//std::cout << std::hex << (uint64_t)addr << std::endl;
 
-	std::cout << (uint64_t)detour->getTrampoline() << std::endl;
+	//auto detour = new Detour(addr, (uint8_t*)&func2);
+	//detour->hook();
+	//pfunc = (_func)detour->getTrampoline();
 
-	std::cout << "Press a key to continue" << std::endl;
-	getchar();
-	func();
+	//std::cout << (uint64_t)detour->getTrampoline() << std::endl;
+
+	//std::cout << "Press a key to continue" << std::endl;
+	//getchar();
+	//func();
 
 	getchar();
 	return 0;
