@@ -2,4 +2,7 @@
 # Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
 ################################################################################
 
-/WinLib/.vs/WinLib/v15/Browse.VC.opendb
+/WinLib/.vs/
+/WinLib/x64/
+/WinLib/WinLib/x64
+/WinLib/Debug
