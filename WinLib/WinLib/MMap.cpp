@@ -12,17 +12,16 @@ MMapper::MMapper(PEFile* peFile) {
 	this->peFile = peFile;
 }
 
-bool MMapper::map(HANDLE handle) {
+MMapper::STATUS MMapper::map(HANDLE handle) {
 	return this->mapInternal(handle);
 }
 
-bool MMapper::map(DWORD pid) {
+MMapper::STATUS MMapper::map(DWORD pid) {
 
 	HANDLE processHandle = OpenProcess(PROCESS_ALL_ACCESS, true, pid);
 
 	if (!processHandle) {
-		std::cout << "OpenProcess failed: " << GetLastError() << std::endl;
-		return false;
+		return ACCESSDENIED;
 	}
 
 	auto retValue = this->mapInternal(processHandle);
@@ -31,18 +30,16 @@ bool MMapper::map(DWORD pid) {
 	return retValue;
 }
 
-bool MMapper::mapInternal(HANDLE processHandle) {
+MMapper::STATUS MMapper::mapInternal(HANDLE processHandle) {
 	if (!this->peFile->isValid()) {
-		std::cout << "Error: PEFile not valid" << std::endl;
-		return false;
+		return PEINVALID;
 	}
 
 	LPVOID memory = VirtualAllocEx(processHandle, 0, this->peFile->getImageSize(), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 
 	if (!memory) {
-		std::cout << "VirtualAlloc failed: " << GetLastError() << std::endl;
 		CloseHandle(processHandle);
-		return false;
+		return FAILED;
 	}
 
 	this->payload = new byte[this->peFile->getImageSize()];
@@ -58,16 +55,15 @@ bool MMapper::mapInternal(HANDLE processHandle) {
 	MMapper::setProtectionFlags();
 
 	if (!MMapper::executePayload(processHandle, memory)) {
-		std::cout << "executePayload() failed" << std::endl;
 		VirtualFree(memory, this->peFile->getImageSize(), MEM_FREE);
 		CloseHandle(processHandle);
 
-		return false;
+		return FAILED;
 	}
 
 	VirtualFree(memory, this->peFile->getImageSize(), MEM_FREE);
 
-	return true;
+	return SUCCESS;
 }
 
 bool MMapper::mapHeader() {
@@ -107,12 +103,15 @@ bool MMapper::executePayload(HANDLE processHandle, LPVOID peBase) {
 		return false;
 	}
 
-	this->writeLoaderParamsToProcess(processHandle, (byte*)loaderMemory + loaderStubSize, peBase);
+	if (!this->writeLoaderParamsToProcess(processHandle, (byte*)loaderMemory + loaderStubSize, peBase))
+		return false;
 
 	std::cout << "Dll-EntryPoint: 0x" << std::hex << (DWORD64)peBase + this->peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint << std::endl;
 	std::cout << "Shellcode mapped to 0x" << std::hex << loaderMemory << std::endl;
-	std::cout << "press a key to continue";
-	getchar();
+
+	//==>DEBUG<==
+	//std::cout << "press a key to continue";
+	//getchar();
 
 	HANDLE thread = CreateRemoteThreadEx(processHandle, 0, 0, (LPTHREAD_START_ROUTINE)loaderMemory, (byte*)loaderMemory + loaderStubSize, 0, 0, 0);
 	WaitForSingleObject(thread, INFINITE);

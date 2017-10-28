@@ -120,7 +120,7 @@ void manualmap() {
 		
 		MMapper* mapper = new MMapper(pe);
 
-		if (mapper->map(8920)) {
+		if (mapper->map(5708)) {
 			Console::printLog(LogType::DEBUG, "PE mapped into target process");
 		}
 		else {

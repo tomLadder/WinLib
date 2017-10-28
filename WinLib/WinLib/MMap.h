@@ -20,10 +20,17 @@ namespace WinLib {
 				bool writeLoaderParamsToProcess(HANDLE processHandle, LPVOID loaderMemory, LPVOID peBase);
 				bool executePayload(HANDLE processHandle, LPVOID peBase);
 			public:
+				enum STATUS {
+					SUCCESS,
+					FAILED,
+					ACCESSDENIED,
+					PEINVALID
+				};
+
 				MMapper(PEFile* peFile);
-				bool map(DWORD pid);
-				bool map(HANDLE handle);
-				bool mapInternal(HANDLE handle);
+				STATUS map(DWORD pid);
+				STATUS map(HANDLE handle);
+				STATUS mapInternal(HANDLE handle);
 			};
 		}
 	}
