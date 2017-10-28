@@ -1,1 +1,2 @@
-﻿LINK : fatal error LNK1181: cannot open input file 'WinLib.lib'
+﻿  EntryPoint.cpp
+  Tester.vcxproj -> C:\Dev\WinLib\WinLib\x64\Release\Tester.exe

@@ -3,9 +3,6 @@
 #include "PEFile.h"
 #include "LoaderParamsMMap.h"
 
-
-#define RVA	(m,b) ((PVOID)((ULONG_PTR)(b)+(ULONG_PTR)(m)))
-
 namespace WinLib {
 	namespace PE {
 		namespace Loader {
@@ -16,7 +13,8 @@ namespace WinLib {
 
 				bool mapHeader();
 				bool mapSections();
-				bool baseRelocation();
+				bool baseRelocation(ULONG_PTR targetBase);
+				PIMAGE_BASE_RELOCATION processRelocation(ULONG_PTR address, ULONG count, PUSHORT typeOffset, LONGLONG delta);
 				bool setProtectionFlags();
 				bool writeToProcess(HANDLE processHandle, LPVOID memBase, int size);
 				bool writeLoaderParamsToProcess(HANDLE processHandle, LPVOID loaderMemory, LPVOID peBase);

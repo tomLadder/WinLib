@@ -1,5 +1,6 @@
 #include "MMap.h"
 
+#define RVA(m, b) ((PVOID)((ULONG_PTR)(b)+(ULONG_PTR)(m)))
 
 using WinLib::PE::Loader::MMapper;
 using WinLib::PE::PEFile;
@@ -47,12 +48,12 @@ bool MMapper::mapInternal(HANDLE processHandle) {
 	this->payload = new byte[this->peFile->getImageSize()];
 	memset(this->payload, 0, this->peFile->getImageSize());
 
-	std::cout << "AllocBase: 0x" << std::hex << memory << std::endl;
+	std::cout << "AllocBase: 0x" << std::hex << memory << std::flush << std::endl;
 	std::cout << "AllocSize: " << this->peFile->getImageSize() << std::endl;
 
 	MMapper::mapHeader();
 	MMapper::mapSections();
-	MMapper::baseRelocation();
+	MMapper::baseRelocation((ULONG_PTR)memory);
 	MMapper::writeToProcess(processHandle, memory, this->peFile->getImageSize());
 	MMapper::setProtectionFlags();
 
@@ -151,25 +152,58 @@ bool MMapper::writeToProcess(HANDLE processHandle, LPVOID memBase, int size) {
 	return true;
 }
 
-bool MMapper::baseRelocation() {
-	//fix base relocs
+bool MMapper::baseRelocation(ULONG_PTR targetBase) {
 	ULONG count;
 	ULONG_PTR address;
 	PUSHORT typeOffset;
+	LONGLONG delta;
 
+	delta = (ULONG_PTR)targetBase - this->peFile->getNtHeader()->OptionalHeader.ImageBase;
 	auto dir = (PIMAGE_BASE_RELOCATION)((byte*)this->payload + this->peFile->getNtHeader()->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress);
-	auto dirend = dir + dir->SizeOfBlock;
+	auto dirend = dir + this->peFile->getNtHeader()->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].Size;
 
 	while (dir < dirend && dir->SizeOfBlock > 0) {
-		count = dir->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION) / sizeof(USHORT);
-		//address = (ULONG_PTR)RVA(this->payload, dir->VirtualAddress);
-
-		//RVA(0, 0);
-
+		count = (dir->SizeOfBlock - 8) >> 1;
+		address = (ULONG_PTR)RVA(payload, dir->VirtualAddress);
 		typeOffset = (PUSHORT)(dir + 1);
+		this->processRelocation(address, count, typeOffset, delta);
+
+		dir = dir + dir->SizeOfBlock;
 	}
 
 	return true;
+}
+
+PIMAGE_BASE_RELOCATION MMapper::processRelocation(ULONG_PTR address, ULONG count, PUSHORT typeOffset, LONGLONG delta) {
+	SHORT offset;
+	USHORT type;
+	PUSHORT shortPtr;
+	PULONG longPtr;
+	PULONGLONG longLongPtr;
+
+	for (int i = 0; i < count; i++) {
+		offset = *typeOffset & 0xFFF;
+		type = *typeOffset >> 12;
+		shortPtr = (PUSHORT)(RVA(address, offset));
+
+		switch (type) {
+		case IMAGE_REL_BASED_DIR64:
+			longLongPtr = (PUINT64)RVA(address, offset);
+			*longLongPtr = *longLongPtr + delta;
+			break;
+		case IMAGE_REL_BASED_HIGHLOW:
+			longPtr = (PULONG)RVA(address, offset);
+			*longPtr = *longPtr + (delta & 0xFFFFFFFF);
+			break;
+		default:
+			std::cout << "Unknown fixup type: " << type << std::endl;
+			return (PIMAGE_BASE_RELOCATION)NULL;
+		}
+
+		typeOffset++;
+	}
+
+	return (PIMAGE_BASE_RELOCATION)typeOffset;
 }
 
 bool MMapper::setProtectionFlags() {

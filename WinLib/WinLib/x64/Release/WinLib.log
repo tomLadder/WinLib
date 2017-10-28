@@ -4,7 +4,7 @@
   Hook.cpp
   LoadLibInjection.cpp
   MMap.cpp
-MMap.cpp(157): warning C4101: 'address': unreferenced local variable
+MMap.cpp(186): warning C4018: '<': signed/unsigned mismatch
   PatternScanner.cpp
   PEAnalyser.cpp
 PEAnalyser.cpp(20): warning C4244: 'argument': conversion from 'std::streamoff' to 'int', possible loss of data

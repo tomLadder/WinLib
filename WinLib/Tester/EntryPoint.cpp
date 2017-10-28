@@ -112,13 +112,15 @@ typedef void(*_func)();
 _func pfunc;
 
 void manualmap() {
-	auto pe = PEFile::loadFromFile("C:\\Users\\Thomas\\source\\repos\\EmptyDll\\x64\\Release\\EmptyDll.dll");
+	//auto pe = PEFile::loadFromFile("C:\\Users\\Thomas\\source\\repos\\EmptyDll\\x64\\Release\\EmptyDll.dll");
+	//C:\Dev\dxlib\dxlib\x64\Release
+	auto pe = PEFile::loadFromFile("C:\\Dev\\dxlib\\dxlib\\x64\\Release\\dx11.dll");
 	if (pe) {
 		Console::printLog(LogType::DEBUG, "PEFile found");
 		
 		MMapper* mapper = new MMapper(pe);
 
-		if (mapper->map(2992)) {
+		if (mapper->map(8920)) {
 			Console::printLog(LogType::DEBUG, "PE mapped into target process");
 		}
 		else {
