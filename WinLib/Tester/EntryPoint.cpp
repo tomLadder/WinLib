@@ -112,7 +112,7 @@ BOOL SetPrivilege(
 }
 
 void testDriver() {
-	auto driver = new Driver(L"C:\\Users\\Thomas\\source\\repos\\KernelDriver\\x64\\Release\\KernelDriver.sys", L"KernelDriver");
+	auto driver = new Driver("C:\\Users\\Thomas\\source\\repos\\KernelDriver\\x64\\Release\\KernelDriver.sys");
 
 	if (!driver->load()) {
 		Console::printLog(LogType::ERR, "Driver load failed!");

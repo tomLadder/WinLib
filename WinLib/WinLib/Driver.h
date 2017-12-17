@@ -9,8 +9,7 @@ namespace WinLib {
 		namespace Loader {
 			class Driver {
 			private:
-				std::wstring path;
-				std::wstring displayname;
+				char *path;
 				size_t hash;
 
 				NTSTATUS (NTAPI *NtLoadDriver)(_In_ PUNICODE_STRING DriverServiceName);
@@ -22,7 +21,7 @@ namespace WinLib {
 				bool create_regentry();
 				bool remove_regentry();
 			public:
-				Driver(std::wstring path, std::wstring displayname);
+				Driver(char *path);
 
 				bool load();
 				bool unload();

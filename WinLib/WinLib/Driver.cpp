@@ -2,12 +2,12 @@
 
 using WinLib::PE::Loader::Driver;
 
-Driver::Driver(std::wstring path, std::wstring displayname) {
+Driver::Driver(char *path) {
 	this->path = path;
-	this->displayname = displayname;
 	
-	std::hash <std::wstring> hash_fn;
-	this->hash = hash_fn(this->path);
+	std::hash <std::string> hash_fn;
+	std::cout << "Hello world" << std::string(this->path) << std::endl;
+	this->hash = hash_fn(std::string(this->path));
 
 	auto handle									= GetModuleHandle("ntdll.dll");
 	*(FARPROC *)&this->NtLoadDriver				= GetProcAddress(handle, "NtLoadDriver");
@@ -24,16 +24,17 @@ bool Driver::load() {
 
 	wchar_t buf[1024];
 	wcscpy_s(buf, L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\");
-	
 	wcscat_s(buf, std::to_wstring(this->hash).c_str());
 
 	this->RtlInitUnicodeString(&path, buf);
+
 	auto code = this->NtLoadDriver(&path);
 	if (code != STATUS_SUCCESS) {
+		std::cout << std::hex << code << std::endl;
 		return false;
 	}
 
-	remove_regentry();
+	//remove_regentry();
 
 	return true;
 }
@@ -50,12 +51,15 @@ bool Driver::unload() {
 
 	this->RtlInitUnicodeString(&path, buf);
 
+
+
 	auto code = this->NtUnloadDriver(&path);
 	if (code != STATUS_SUCCESS) {
+		std::cout << std::hex << code << std::endl;
 		return false;
 	}
 
-	remove_regentry();
+	//remove_regentry();
 
 	return true;
 }
@@ -64,30 +68,30 @@ bool Driver::create_regentry() {
 	HKEY phkResult = NULL;
 	DWORD start = 0;
 	DWORD type = 3;
-	std::wstring imagepath = std::wstring(L"\\??\\").append(this->path);
+	std::string imagepath = std::string("\\??\\").append(this->path);
 
-	auto errCode = RegCreateKeyExW(HKEY_LOCAL_MACHINE, std::wstring(L"System\\CurrentControlSet\\Services\\").append(std::to_wstring(this->hash).c_str()).c_str(), 0, NULL, 0, KEY_ALL_ACCESS, NULL, &phkResult, NULL);
+	auto errCode = RegCreateKeyExA(HKEY_LOCAL_MACHINE, std::string("System\\CurrentControlSet\\Services\\").append(std::to_string(this->hash).c_str()).c_str(), 0, NULL, 0, KEY_ALL_ACCESS, NULL, &phkResult, NULL);
 	if (errCode) {
 		RegCloseKey(phkResult);
 		return false;
 	}
 	
-	if (RegSetValueExW(phkResult, L"Start", 0, REG_DWORD, (const BYTE *)&start, sizeof(DWORD)) != ERROR_SUCCESS) {
+	if (RegSetValueEx(phkResult, "Start", 0, REG_DWORD, (const BYTE *)&start, sizeof(DWORD)) != ERROR_SUCCESS) {
 		RegCloseKey(phkResult);
 		return false;
 	}
 
-	if (RegSetValueExW(phkResult, L"Type", 0, REG_DWORD, (const BYTE *)&type, sizeof(DWORD)) != ERROR_SUCCESS) {
+	if (RegSetValueEx(phkResult, "Type", 0, REG_DWORD, (const BYTE *)&type, sizeof(DWORD)) != ERROR_SUCCESS) {
 		RegCloseKey(phkResult);
 		return false;
 	}
 
-	if (RegSetValueExW(phkResult, L"ImagePath", 0, REG_SZ, (const BYTE *)imagepath.c_str(), imagepath.size() * sizeof(WCHAR)) != ERROR_SUCCESS) {
+	if (RegSetValueEx(phkResult, "ImagePath", 0, REG_SZ, (const BYTE *)imagepath.c_str(), imagepath.size() * sizeof(CHAR)) != ERROR_SUCCESS) {
 		RegCloseKey(phkResult);
 		return false;
 	}
 
-	if (RegSetValueExW(phkResult, L"DisplayName", 0, REG_SZ, (const BYTE *)this->displayname.c_str(), imagepath.size() * sizeof(CHAR)) != ERROR_SUCCESS) {
+	if (RegSetValueEx(phkResult, "DisplayName", 0, REG_SZ, (const BYTE *)std::to_string(this->hash).c_str(), std::to_string(this->hash).size()) != ERROR_SUCCESS) {
 		RegCloseKey(phkResult);
 		return false;
 	}
@@ -101,9 +105,9 @@ bool Driver::remove_regentry() {
 	HKEY phkResult = NULL;
 	DWORD start = 0;
 	DWORD type = 3;
-	std::wstring imagepath = std::wstring(L"\\??\\").append(this->path);
+	std::string imagepath = std::string("\\??\\").append(this->path);
 
-	auto errCode = RegDeleteKeyExW(HKEY_LOCAL_MACHINE, std::wstring(L"System\\CurrentControlSet\\Services\\").append(std::to_wstring(this->hash).c_str()).c_str(), KEY_ALL_ACCESS, 0);
+	auto errCode = RegDeleteKeyEx(HKEY_LOCAL_MACHINE, std::string("System\\CurrentControlSet\\Services\\").append(std::to_string(this->hash).c_str()).c_str(), KEY_ALL_ACCESS, 0);
 	if (errCode) {
 		RegCloseKey(phkResult);
 		return false;
