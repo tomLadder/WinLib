@@ -7,7 +7,7 @@
 #include <Detour.h>
 #include <Console.h>
 #include <MMap.h>
-
+#include <Driver.h>
 using WinLib::PE::Loader::LoadLibInjection;
 using WinLib::PE::PEFile;
 using WinLib::Mem::PatternScanner;
@@ -15,6 +15,7 @@ using WinLib::Mem::Hook::Detour;
 using WinLib::Output::Console;
 using WinLib::Output::LogType;
 using WinLib::PE::Loader::MMapper;
+using WinLib::PE::Loader::Driver;
 
 BOOL SetPrivilege(
 	HANDLE hToken,          // token handle
@@ -22,28 +23,33 @@ BOOL SetPrivilege(
 	BOOL bEnablePrivilege   // TRUE to enable.  FALSE to disable
 );
 
-void adjustPrivileges() {
-	TOKEN_PRIVILEGES tp;
+bool EnablePrivilege(
+	LPCWSTR lpPrivilegeName
+)
+{
+	TOKEN_PRIVILEGES Privilege;
 	HANDLE hToken;
+	DWORD dwErrorCode;
 
-	if (OpenProcessToken((HANDLE)-1, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
-	{
-		tp.PrivilegeCount = 1;
-		tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+	Privilege.PrivilegeCount = 1;
+	Privilege.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+	if (!LookupPrivilegeValueW(NULL, lpPrivilegeName,
+		&Privilege.Privileges[0].Luid))
+		return GetLastError();
 
-		tp.Privileges[0].Luid.LowPart = 20;
-		tp.Privileges[0].Luid.HighPart = 0;
+	if (!OpenProcessToken(GetCurrentProcess(),
+		TOKEN_ADJUST_PRIVILEGES, &hToken))
+		return GetLastError();
 
-		AdjustTokenPrivileges(hToken, FALSE, &tp, 0, NULL, NULL);
-		if (!SetPrivilege(hToken, SE_DEBUG_NAME, TRUE))
-		{
-			CloseHandle(hToken);
-
-			return;
-		}
-
+	if (!AdjustTokenPrivileges(hToken, FALSE, &Privilege, sizeof(Privilege),
+		NULL, NULL)) {
+		dwErrorCode = GetLastError();
 		CloseHandle(hToken);
+		return dwErrorCode;
 	}
+
+	CloseHandle(hToken);
+	return TRUE;
 }
 
 BOOL SetPrivilege(
@@ -105,69 +111,34 @@ BOOL SetPrivilege(
 	return TRUE;
 }
 
-void func();
-void func2();
+void testDriver() {
+	auto driver = new Driver(L"C:\\Users\\Thomas\\source\\repos\\KernelDriver\\x64\\Release\\KernelDriver.sys", L"KernelDriver");
 
-typedef void(*_func)();
-_func pfunc;
-
-void manualmap() {
-	//auto pe = PEFile::loadFromFile("C:\\Users\\Thomas\\source\\repos\\EmptyDll\\x64\\Release\\EmptyDll.dll");
-	//C:\Dev\dxlib\dxlib\x64\Release
-	auto pe = PEFile::loadFromFile("C:\\Dev\\dxlib\\dxlib\\x64\\Release\\dx11.dll");
-	if (pe) {
-		Console::printLog(LogType::DEBUG, "PEFile found");
-		
-		MMapper* mapper = new MMapper(pe);
-
-		if (mapper->map(5708)) {
-			Console::printLog(LogType::DEBUG, "PE mapped into target process");
-		}
-		else {
-			Console::printLog(LogType::WARN, "Could not mapp PE into target process");
-		}
+	if (!driver->load()) {
+		Console::printLog(LogType::ERR, "Driver load failed!");
+		return;
 	}
-	else {
-		Console::printLog(LogType::WARN, "Could not read PE-File");
+
+	Console::printLog(LogType::INFO, "Driver loaded!");
+	Console::printLog(LogType::INFO, "Press a key to unload!");
+	getchar();
+
+	if (!driver->unload()) {
+		Console::printLog(LogType::ERR, "Driver unload failed!");
+		return;
 	}
+
+	Console::printLog(LogType::INFO, "Driver unloaded!");
 }
 
 int main(int argc, char **argv) {
-	adjustPrivileges();
+	if (!EnablePrivilege(L"SeLoadDriverPrivilege"))
+	{
+		Console::printLog(LogType::ERR, "Setting driver privilege failed");
+	}
 
-	manualmap();
-
-	//func();
-
-	//auto mask = "xxxxxxx????xxx????x????xxx????xxxxx????xxx?????xxx????";
-	//auto pattern = "\x48\x83\xEC\x38\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\x0D\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00\x48\x8B\xC8\xFF\x15\x00\x00\x00\x00\xC7\x44\x24\x00\x00\x00\x00\x00\x48\x8D\x15\x00\x00\x00\x00";
-
-	//auto addr = PatternScanner::search(pattern, mask);
-
-	//std::cout << std::hex << (uint64_t)addr << std::endl;
-
-	//auto detour = new Detour(addr, (uint8_t*)&func2);
-	//detour->hook();
-	//pfunc = (_func)detour->getTrampoline();
-
-	//std::cout << (uint64_t)detour->getTrampoline() << std::endl;
-
-	//std::cout << "Press a key to continue" << std::endl;
-	//getchar();
-	//func();
+	testDriver();
 
 	getchar();
 	return 0;
-}
-
-void func() {
-	std::cout << "hello world" << std::endl;
-
-	int x = 24 * 232;
-	std::cout << "Addr: " << x << std::endl;
-}
-
-void func2() {
-	std::cout << "hooked" << std::endl;
-	pfunc();
 }

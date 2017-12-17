@@ -6,19 +6,19 @@ using WinLib::Output::LogType;
 void Console::printLogType(LogType type) {
 	if (type == LogType::ERR) {
 		Console::setColor(COLOR_RED);
-		std::cout << "ERROR ";
+		std::cout << "[-] ";
 	}
 	else if (type == LogType::DEBUG) {
 		Console::setColor(COLOR_GREEN);
-		std::cout << "DEBUG ";
+		std::cout << "[~] ";
 	}
 	else if (type == LogType::INFO) {
-		Console::setColor(COLOR_LIGHTWHITE);
-		std::cout << "INFO  ";
+		Console::setColor(COLOR_YELLOW);
+		std::cout << "[i] ";
 	}
 	else if (type == LogType::WARN) {
 		Console::setColor(COLOR_LIGHTYELLOW);
-		std::cout << "WARN  ";
+		std::cout << "[!] ";
 	}
 }
 

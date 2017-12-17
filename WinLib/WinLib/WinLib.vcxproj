@@ -107,7 +107,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -115,11 +116,13 @@
     </Link>
     <Lib>
       <AdditionalDependencies>capstone.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
     <ClInclude Include="Detour.h" />
+    <ClInclude Include="Driver.h" />
     <ClInclude Include="HandleInformation.h" />
     <ClInclude Include="Hook.h" />
     <ClInclude Include="LoaderParamsMMap.h" />
@@ -137,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Detour.cpp" />
+    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="HandleInformation.cpp" />
     <ClCompile Include="Hook.cpp" />
     <ClCompile Include="LoadLibInjection.cpp" />

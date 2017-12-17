@@ -90,6 +90,9 @@
     <ClInclude Include="Vmt.h">
       <Filter>Headerdateien\Memory\Hook</Filter>
     </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>Headerdateien\PE\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinProcess.cpp">
@@ -133,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="Vmt.cpp">
       <Filter>Quelldateien\Memory\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.cpp">
+      <Filter>Quelldateien\PE\Loader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
