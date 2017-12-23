@@ -6,7 +6,6 @@ Driver::Driver(char *path) {
 	this->path = path;
 	
 	std::hash <std::string> hash_fn;
-	std::cout << "Hello world" << std::string(this->path) << std::endl;
 	this->hash = hash_fn(std::string(this->path));
 
 	auto handle									= GetModuleHandle("ntdll.dll");
@@ -34,7 +33,7 @@ bool Driver::load() {
 		return false;
 	}
 
-	//remove_regentry();
+	remove_regentry();
 
 	return true;
 }
@@ -51,15 +50,13 @@ bool Driver::unload() {
 
 	this->RtlInitUnicodeString(&path, buf);
 
-
-
 	auto code = this->NtUnloadDriver(&path);
 	if (code != STATUS_SUCCESS) {
 		std::cout << std::hex << code << std::endl;
 		return false;
 	}
 
-	//remove_regentry();
+	remove_regentry();
 
 	return true;
 }
