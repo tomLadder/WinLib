@@ -8,6 +8,8 @@
 #include <Console.h>
 #include <MMap.h>
 #include <Driver.h>
+#include <RawMemoryCommunication.h>
+
 using WinLib::PE::Loader::LoadLibInjection;
 using WinLib::PE::PEFile;
 using WinLib::Mem::PatternScanner;
@@ -16,6 +18,7 @@ using WinLib::Output::Console;
 using WinLib::Output::LogType;
 using WinLib::PE::Loader::MMapper;
 using WinLib::PE::Loader::Driver;
+using WinLib::Communication::Raw::RawMemoryCommunication;
 
 BOOL SetPrivilege(
 	HANDLE hToken,          // token handle
@@ -131,13 +134,29 @@ void testDriver() {
 	Console::printLog(LogType::INFO, "Driver unloaded!");
 }
 
+void testRawMemoryCommunication() {
+	auto io = new RawMemoryCommunication();
+	if (!io->init()) {
+		std::cout << "Error" << std::endl;
+		getchar();
+		return;
+	}
+
+	io->registerCallback([&](const RawMemoryCommunication::InternalBuffer* internalBuffer) {
+		std::cout << "state_callback: " << internalBuffer->state << std::endl;
+	});
+
+	io->write()
+}
+
 int main(int argc, char **argv) {
 	if (!EnablePrivilege(L"SeLoadDriverPrivilege"))
 	{
 		Console::printLog(LogType::ERR, "Setting driver privilege failed");
 	}
 
-	testDriver();
+	//testDriver();
+	testRawMemoryCommunication();
 
 	getchar();
 	return 0;

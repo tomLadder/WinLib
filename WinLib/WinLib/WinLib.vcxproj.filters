@@ -43,6 +43,24 @@
     <Filter Include="Quelldateien\Output">
       <UniqueIdentifier>{8da756e2-cd54-4622-a0a7-787d468ba8ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Communication">
+      <UniqueIdentifier>{8625dcbb-1fbd-46b4-9471-70a453acac20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Communication">
+      <UniqueIdentifier>{5b215644-05fd-4d67-a08c-2778c9a4cd66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Communication\Raw">
+      <UniqueIdentifier>{8750b272-0459-4156-97cf-ed22cbb7d1d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Communication\Raw">
+      <UniqueIdentifier>{e7032b17-c632-4ffb-8043-15688e735869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\PE\Loader\Mono">
+      <UniqueIdentifier>{0efba6bd-567a-4f01-a796-953fc8927fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\PE\Loader\Mono">
+      <UniqueIdentifier>{8b5dbc05-eab2-476a-8bfe-8679c35d6293}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WinProcess.h">
@@ -93,6 +111,18 @@
     <ClInclude Include="Driver.h">
       <Filter>Headerdateien\PE\Loader</Filter>
     </ClInclude>
+    <ClInclude Include="RawMemoryCommunication.h">
+      <Filter>Headerdateien\Communication\Raw</Filter>
+    </ClInclude>
+    <ClInclude Include="RawData.h">
+      <Filter>Headerdateien\Communication\Raw</Filter>
+    </ClInclude>
+    <ClInclude Include="PEData.h">
+      <Filter>Headerdateien\Communication\Raw</Filter>
+    </ClInclude>
+    <ClInclude Include="MonoInjection.h">
+      <Filter>Headerdateien\PE\Loader\Mono</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinProcess.cpp">
@@ -139,6 +169,18 @@
     </ClCompile>
     <ClCompile Include="Driver.cpp">
       <Filter>Quelldateien\PE\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="RawMemoryCommunication.cpp">
+      <Filter>Quelldateien\Communication\Raw</Filter>
+    </ClCompile>
+    <ClCompile Include="RawData.cpp">
+      <Filter>Quelldateien\Communication\Raw</Filter>
+    </ClCompile>
+    <ClCompile Include="PEData.cpp">
+      <Filter>Quelldateien\Communication\Raw</Filter>
+    </ClCompile>
+    <ClCompile Include="MonoInjection.cpp">
+      <Filter>Quelldateien\PE\Loader\Mono</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
