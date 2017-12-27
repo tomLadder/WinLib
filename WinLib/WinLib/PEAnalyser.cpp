@@ -17,7 +17,7 @@ PEFile* PEAnalyser::load(std::string path) {
 
 		if (stream) {
 			stream.close();
-			return new PEFile(rawData, length);
+			return new PEFile(rawData, (int)length);
 		}
 
 		delete rawData;

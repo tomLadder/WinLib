@@ -57,7 +57,7 @@ PEFile* PEFile::loadFromFile(const std::string& path) {
 
 		ifs.close();
 
-		return new PEFile(buffer, size);
+		return new PEFile(buffer, (int)size);
 	}
 	else {
 		//Improve exception handling!

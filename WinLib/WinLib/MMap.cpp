@@ -180,7 +180,7 @@ PIMAGE_BASE_RELOCATION MMapper::processRelocation(ULONG_PTR address, ULONG count
 	PULONG longPtr;
 	PULONGLONG longLongPtr;
 
-	for (int i = 0; i < count; i++) {
+	for (ULONG i = 0; i < count; i++) {
 		offset = *typeOffset & 0xFFF;
 		type = *typeOffset >> 12;
 		shortPtr = (PUSHORT)(RVA(address, offset));

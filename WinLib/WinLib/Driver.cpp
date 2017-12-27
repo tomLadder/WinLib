@@ -83,12 +83,12 @@ bool Driver::create_regentry() {
 		return false;
 	}
 
-	if (RegSetValueEx(phkResult, "ImagePath", 0, REG_SZ, (const BYTE *)imagepath.c_str(), imagepath.size() * sizeof(CHAR)) != ERROR_SUCCESS) {
+	if (RegSetValueEx(phkResult, "ImagePath", 0, REG_SZ, (const BYTE *)imagepath.c_str(), (DWORD)(imagepath.size() * sizeof(CHAR))) != ERROR_SUCCESS) {
 		RegCloseKey(phkResult);
 		return false;
 	}
 
-	if (RegSetValueEx(phkResult, "DisplayName", 0, REG_SZ, (const BYTE *)std::to_string(this->hash).c_str(), std::to_string(this->hash).size()) != ERROR_SUCCESS) {
+	if (RegSetValueEx(phkResult, "DisplayName", 0, REG_SZ, (const BYTE *)std::to_string(this->hash).c_str(), (DWORD)(std::to_string(this->hash).size())) != ERROR_SUCCESS) {
 		RegCloseKey(phkResult);
 		return false;
 	}
