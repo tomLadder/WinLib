@@ -147,6 +147,15 @@
   <ItemGroup>
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="memory.h" />
+    <ClInclude Include="PEFile.h" />
+    <ClInclude Include="winstructs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PEFile.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -17,10 +17,41 @@
       <UniqueIdentifier>{8E41214B-6785-4CFE-B992-037D68949A14}</UniqueIdentifier>
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
     </Filter>
+    <Filter Include="Header Files\std">
+      <UniqueIdentifier>{5b14c1d6-86fe-4acc-afff-ee33ab84b271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PE">
+      <UniqueIdentifier>{e1439254-de24-4413-99c9-a51115e4253f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\PE">
+      <UniqueIdentifier>{a2f58b14-6ba9-40c6-abc2-2c292ca7a9f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Output">
+      <UniqueIdentifier>{9bf3d206-3e4f-4058-8a0c-62739a25e871}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Inf Include="WinLibKernel.inf">
       <Filter>Driver Files</Filter>
     </Inf>
-  </ItemGroup>  
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="memory.h">
+      <Filter>Header Files\std</Filter>
+    </ClInclude>
+    <ClInclude Include="PEFile.h">
+      <Filter>Header Files\PE</Filter>
+    </ClInclude>
+    <ClInclude Include="winstructs.h">
+      <Filter>Header Files\std</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\Output</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PEFile.cpp">
+      <Filter>Resource Files\PE</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
