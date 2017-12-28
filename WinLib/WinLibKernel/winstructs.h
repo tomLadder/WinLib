@@ -316,3 +316,39 @@ typedef PIMAGE_NT_HEADERS64                 PIMAGE_NT_HEADERS;
 typedef IMAGE_NT_HEADERS32                  IMAGE_NT_HEADERS;
 typedef PIMAGE_NT_HEADERS32                 PIMAGE_NT_HEADERS;
 #endif
+
+//
+// Import Format
+//
+
+typedef struct _IMAGE_IMPORT_BY_NAME {
+	WORD    Hint;
+	CHAR   Name[1];
+} IMAGE_IMPORT_BY_NAME, *PIMAGE_IMPORT_BY_NAME;
+
+typedef struct _IMAGE_THUNK_DATA64 {
+	union {
+		ULONGLONG ForwarderString;  // PBYTE 
+		ULONGLONG Function;         // PDWORD
+		ULONGLONG Ordinal;
+		ULONGLONG AddressOfData;    // PIMAGE_IMPORT_BY_NAME
+	} u1;
+} IMAGE_THUNK_DATA64;
+typedef IMAGE_THUNK_DATA64 * PIMAGE_THUNK_DATA64;
+
+typedef struct _IMAGE_THUNK_DATA32 {
+	union {
+		DWORD ForwarderString;      // PBYTE 
+		DWORD Function;             // PDWORD
+		DWORD Ordinal;
+		DWORD AddressOfData;        // PIMAGE_IMPORT_BY_NAME
+	} u1;
+} IMAGE_THUNK_DATA32;
+typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;
+
+#define IMAGE_ORDINAL_FLAG64 0x8000000000000000
+#define IMAGE_ORDINAL_FLAG32 0x80000000
+#define IMAGE_ORDINAL64(Ordinal) (Ordinal & 0xffff)
+#define IMAGE_ORDINAL32(Ordinal) (Ordinal & 0xffff)
+#define IMAGE_SNAP_BY_ORDINAL64(Ordinal) ((Ordinal & IMAGE_ORDINAL_FLAG64) != 0)
+#define IMAGE_SNAP_BY_ORDINAL32(Ordinal) ((Ordinal & IMAGE_ORDINAL_FLAG32) != 0)
