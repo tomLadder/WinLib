@@ -1,10 +1,12 @@
+#pragma once
+
 #include <ntddk.h>
 
 typedef unsigned char BYTE;
 typedef unsigned long DWORD;
 typedef unsigned short WORD;
 
-#define IMAGE_DOS_SIGNATURE                 0x4D5A      // MZ
+#define IMAGE_DOS_SIGNATURE					 0x5A4D      // MZ
 #define IMAGE_SIZEOF_SHORT_NAME              8
 
 // Directory Entries
@@ -25,6 +27,22 @@ typedef unsigned short WORD;
 #define IMAGE_DIRECTORY_ENTRY_IAT            12   // Import Address Table
 #define IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT   13   // Delay Load Import Descriptors
 #define IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14   // COM Runtime descriptor
+
+//
+// Based relocation types.
+//
+
+#define IMAGE_REL_BASED_ABSOLUTE              0
+#define IMAGE_REL_BASED_HIGH                  1
+#define IMAGE_REL_BASED_LOW                   2
+#define IMAGE_REL_BASED_HIGHLOW               3
+#define IMAGE_REL_BASED_HIGHADJ               4
+#define IMAGE_REL_BASED_MACHINE_SPECIFIC_5    5
+#define IMAGE_REL_BASED_RESERVED              6
+#define IMAGE_REL_BASED_MACHINE_SPECIFIC_7    7
+#define IMAGE_REL_BASED_MACHINE_SPECIFIC_8    8
+#define IMAGE_REL_BASED_MACHINE_SPECIFIC_9    9
+#define IMAGE_REL_BASED_DIR64                 10
 
 typedef struct _IMAGE_SECTION_HEADER {
 	BYTE  Name[IMAGE_SIZEOF_SHORT_NAME];

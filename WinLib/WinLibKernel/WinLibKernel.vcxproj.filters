@@ -29,6 +29,15 @@
     <Filter Include="Header Files\Output">
       <UniqueIdentifier>{9bf3d206-3e4f-4058-8a0c-62739a25e871}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PE\Loader">
+      <UniqueIdentifier>{8410d502-195d-4628-b21f-02ee15937da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\PE\Loader">
+      <UniqueIdentifier>{2a51dad2-415b-4810-bc73-c39979069d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\std">
+      <UniqueIdentifier>{3ab6b104-155f-4417-86a8-c96303036cae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Inf Include="WinLibKernel.inf">
@@ -48,10 +57,19 @@
     <ClInclude Include="Debug.h">
       <Filter>Header Files\Output</Filter>
     </ClInclude>
+    <ClInclude Include="MMapDriver.h">
+      <Filter>Header Files\PE\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
       <Filter>Resource Files\PE</Filter>
+    </ClCompile>
+    <ClCompile Include="MMapDriver.cpp">
+      <Filter>Resource Files\PE\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="memory.cpp">
+      <Filter>Resource Files\std</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

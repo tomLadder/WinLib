@@ -141,6 +141,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <Inf Include="WinLibKernel.inf" />
   </ItemGroup>
@@ -150,10 +155,13 @@
   <ItemGroup>
     <ClInclude Include="Debug.h" />
     <ClInclude Include="memory.h" />
+    <ClInclude Include="MMapDriver.h" />
     <ClInclude Include="PEFile.h" />
     <ClInclude Include="winstructs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="memory.cpp" />
+    <ClCompile Include="MMapDriver.cpp" />
     <ClCompile Include="PEFile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
