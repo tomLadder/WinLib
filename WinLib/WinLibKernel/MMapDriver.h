@@ -1,4 +1,5 @@
 #pragma once
+#include <stdlib.h>
 #include "winstructs.h"
 #include "memory.h"
 #include "PEFile.h"
@@ -25,6 +26,7 @@ namespace WinLib {
 				bool mapHeader();
 				bool mapSections();
 				bool baseRelocation(PVOID targetBase);
+				bool fixImports();
 				PIMAGE_BASE_RELOCATION processRelocation(ULONG_PTR address, ULONG count, PUSHORT typeOffset, LONGLONG delta);
 				bool executeMappedMemory();
 

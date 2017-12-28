@@ -36,6 +36,7 @@ MMapperDriver::STATUS MMapperDriver::map() {
 
 	if (NT_SUCCESS(status)) {
 		KeWaitForSingleObject(pThread, Executive, KernelMode, TRUE, NULL);
+		//Catch ExitCode
 	}
 
 	if (pThread) {
@@ -77,12 +78,8 @@ MMapperDriver::STATUS MMapperDriver::mapInternal(MMapperDriver* this_ptr) {
 	this_ptr->mapHeader();
 	this_ptr->mapSections();
 	this_ptr->baseRelocation(this_ptr->mapBase);
+	this_ptr->fixImports();
 	this_ptr->executeMappedMemory();
-	//MMapperDriver::setProtectionFlags();
-
-	//if (!MMapper::executePayload(processHandle, memory)) {
-	//	return FAILED;
-	//}
 
 	MmFreePagesFromMdl(mdl);
 	PsTerminateSystemThread(STATUS_SUCCESS);
@@ -91,7 +88,6 @@ MMapperDriver::STATUS MMapperDriver::mapInternal(MMapperDriver* this_ptr) {
 }
 
 bool MMapperDriver::mapHeader() {
-	//memcpy(this->payload, this->peFile->getDosHeader(), this->peFile->getHeaderSize());
 	RtlCopyMemory(this->mapBase, this->peFile->getDosHeader(), this->peFile->getHeaderSize());
 
 	return true;
@@ -165,6 +161,35 @@ PIMAGE_BASE_RELOCATION MMapperDriver::processRelocation(ULONG_PTR address, ULONG
 	}
 
 	return (PIMAGE_BASE_RELOCATION)typeOffset;
+}
+
+bool MMapperDriver::fixImports() {
+	auto import_descriptor = (PIMAGE_IMPORT_DESCRIPTOR)((CHAR*)this->mapBase + this->peFile->getNtHeader()->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
+	
+	while ((import_descriptor->OriginalFirstThunk != 0 || import_descriptor->OriginalFirstThunk != 0)) {
+		if (import_descriptor->OriginalFirstThunk != 0) {
+			PIMAGE_THUNK_DATA64 image_thunk_data = (PIMAGE_THUNK_DATA64)((CHAR*)this->mapBase + import_descriptor->OriginalFirstThunk);
+			PIMAGE_THUNK_DATA64 first_thunk_data = (PIMAGE_THUNK_DATA64)((CHAR*)this->mapBase + import_descriptor->FirstThunk);
+			while (image_thunk_data->u1.AddressOfData != 0) {
+				PIMAGE_IMPORT_BY_NAME image_import_by_name = (PIMAGE_IMPORT_BY_NAME)((CHAR*)this->mapBase + image_thunk_data->u1.Ordinal);
+
+				UNICODE_STRING func_name;
+				WCHAR wfunc_name[1024];
+				mbstowcs(wfunc_name, image_import_by_name->Name, strlen(image_import_by_name->Name) + 1);
+
+				RtlInitUnicodeString(&func_name, wfunc_name);
+				auto func = MmGetSystemRoutineAddress(&func_name);
+				first_thunk_data->u1.Function = (ULONGLONG)func;
+
+				first_thunk_data++;
+				image_thunk_data++;
+			}
+		}
+
+		import_descriptor++;
+	}
+
+	return true;
 }
 
 bool MMapperDriver::executeMappedMemory() {
