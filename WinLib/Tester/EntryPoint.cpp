@@ -135,18 +135,46 @@ void testDriver() {
 }
 
 void testRawMemoryCommunication() {
-	auto io = new RawMemoryCommunication();
-	if (!io->init()) {
-		std::cout << "Error" << std::endl;
-		getchar();
-		return;
+	//auto io = new RawMemoryCommunication();
+	//if (!io->init()) {
+	//	std::cout << "Error" << std::endl;
+	//	getchar();
+	//	return;
+	//}
+
+	//io->registerCallback([&](const RawMemoryCommunication::InternalBuffer* internalBuffer) {
+	//	std::cout << "state_callback: " << internalBuffer->state << std::endl;
+	//});
+
+	//io->write();
+}
+
+int test() {
+	int i = 0;
+
+	for (i = 0; i < 100; i++) {
+		if (i % 2) {
+			int x = 100 / i;
+			std::cout << "Ergebnis: " << x << std::endl;
+		}
 	}
 
-	io->registerCallback([&](const RawMemoryCommunication::InternalBuffer* internalBuffer) {
-		std::cout << "state_callback: " << internalBuffer->state << std::endl;
-	});
+	return i;
+}
 
-	io->write()
+int myTest() {
+	std::cout << "hooked :)" << std::endl;
+	return 100;
+}
+
+void testDetour() {
+	auto detour = new Detour(reinterpret_cast<uint8_t*>(&test), reinterpret_cast<uint8_t*>(&myTest));
+	detour->hook();
+
+	auto original =  reinterpret_cast<int(*)()> (detour->getTrampoline());
+	original();
+
+	test();
 }
 
 int main(int argc, char **argv) {
@@ -157,6 +185,7 @@ int main(int argc, char **argv) {
 
 	//testDriver();
 	testRawMemoryCommunication();
+	testDetour();
 
 	getchar();
 	return 0;

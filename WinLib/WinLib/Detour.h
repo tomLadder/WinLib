@@ -1,5 +1,5 @@
 #pragma once
-#include "capstone\include\capstone.h"
+#include "ldasm.h"
 #include "Hook.h"
 #include <iostream>
 #include "WinThread.h"

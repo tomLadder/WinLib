@@ -61,6 +61,12 @@
     <Filter Include="Quelldateien\PE\Loader\Mono">
       <UniqueIdentifier>{8b5dbc05-eab2-476a-8bfe-8679c35d6293}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Lib">
+      <UniqueIdentifier>{a3d147ff-bb34-4ac4-accb-331dcb8bccae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Lib">
+      <UniqueIdentifier>{8348e7a1-bb2d-4922-accb-cdc02ed93f71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WinProcess.h">
@@ -123,6 +129,12 @@
     <ClInclude Include="MonoInjection.h">
       <Filter>Headerdateien\PE\Loader\Mono</Filter>
     </ClInclude>
+    <ClInclude Include="ldasm.h">
+      <Filter>Headerdateien\Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="ldasm_defines.h">
+      <Filter>Headerdateien\Lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinProcess.cpp">
@@ -181,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="MonoInjection.cpp">
       <Filter>Quelldateien\PE\Loader\Mono</Filter>
+    </ClCompile>
+    <ClCompile Include="ldasm.cpp">
+      <Filter>Quelldateien\Lib</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

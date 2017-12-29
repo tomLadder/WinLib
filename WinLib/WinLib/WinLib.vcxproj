@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Dev\WinLib\WinLib\WinLib\capstone\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Dev\WinLib\WinLib\WinLib\capstone\lib\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -103,7 +103,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -115,7 +115,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>capstone.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>false</SuppressStartupBanner>
     </Lib>
   </ItemDefinitionGroup>
@@ -125,6 +125,8 @@
     <ClInclude Include="Driver.h" />
     <ClInclude Include="HandleInformation.h" />
     <ClInclude Include="Hook.h" />
+    <ClInclude Include="ldasm.h" />
+    <ClInclude Include="ldasm_defines.h" />
     <ClInclude Include="LoaderParamsMMap.h" />
     <ClInclude Include="LoadLibInjection.h" />
     <ClInclude Include="MMap.h" />
@@ -147,6 +149,7 @@
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="HandleInformation.cpp" />
     <ClCompile Include="Hook.cpp" />
+    <ClCompile Include="ldasm.cpp" />
     <ClCompile Include="LoadLibInjection.cpp" />
     <ClCompile Include="MMap.cpp" />
     <ClCompile Include="MonoInjection.cpp" />
