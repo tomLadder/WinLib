@@ -14,7 +14,9 @@ namespace WinLib {
 				//PUSH lowerPart
 				//MOV [RSP+4], higherPart
 				//RET
-				static constexpr char* jmp_machine_code = "\x68\x00\x00\x00\x00\xC7\x44\x24\x04\x00\x00\x00\x00\xC3";
+				//Investigate in this issue
+				const char* jmp_machine_code = "\x68\x00\x00\x00\x00\xC7\x44\x24\x04\x00\x00\x00\x00\xC3";
+
 
 				int trampoline_size = 0;
 				uint8_t* trampoline;

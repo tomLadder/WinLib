@@ -167,7 +167,7 @@ int myTest() {
 	return 100;
 }
 
-void testDetour() {
+void testDetour() {	
 	auto detour = new Detour(reinterpret_cast<uint8_t*>(&test), reinterpret_cast<uint8_t*>(&myTest));
 	detour->hook();
 
