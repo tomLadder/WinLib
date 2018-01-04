@@ -1,0 +1,86 @@
+;
+; TesterWinLibKernel.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample ; TODO: edit Class
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=TesterWinLibKernel.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+
+[DestinationDirs]
+DefaultDestDir = 12
+TesterWinLibKernel_Device_CoInstaller_CopyFiles = 11
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SampleClassReg
+
+[SampleClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-5
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+TesterWinLibKernel.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%TesterWinLibKernel.DeviceDesc%=TesterWinLibKernel_Device, Root\TesterWinLibKernel ; TODO: edit hw-id
+
+[TesterWinLibKernel_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+TesterWinLibKernel.sys
+
+;-------------- Service installation
+[TesterWinLibKernel_Device.NT.Services]
+AddService = TesterWinLibKernel,%SPSVCINST_ASSOCSERVICE%, TesterWinLibKernel_Service_Inst
+
+; -------------- TesterWinLibKernel driver install sections
+[TesterWinLibKernel_Service_Inst]
+DisplayName    = %TesterWinLibKernel.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\TesterWinLibKernel.sys
+
+;
+;--- TesterWinLibKernel_Device Coinstaller installation ------
+;
+
+[TesterWinLibKernel_Device.NT.CoInstallers]
+AddReg=TesterWinLibKernel_Device_CoInstaller_AddReg
+CopyFiles=TesterWinLibKernel_Device_CoInstaller_CopyFiles
+
+[TesterWinLibKernel_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[TesterWinLibKernel_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[TesterWinLibKernel_Device.NT.Wdf]
+KmdfService =  TesterWinLibKernel, TesterWinLibKernel_wdfsect
+[TesterWinLibKernel_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "TesterWinLibKernel Installation Disk"
+TesterWinLibKernel.DeviceDesc = "TesterWinLibKernel Device"
+TesterWinLibKernel.SVCDESC = "TesterWinLibKernel Service"
