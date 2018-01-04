@@ -153,6 +153,7 @@
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cr0.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="ldasm.h" />
     <ClInclude Include="ldasm_defines.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="winstructs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cr0.cpp" />
     <ClCompile Include="ldasm.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="MMapDriver.cpp" />

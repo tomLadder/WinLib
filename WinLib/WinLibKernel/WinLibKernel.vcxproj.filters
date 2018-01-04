@@ -44,6 +44,12 @@
     <Filter Include="Resource Files\Lib">
       <UniqueIdentifier>{7fe015a9-0fba-4249-8953-ec692cdc5027}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Memory">
+      <UniqueIdentifier>{ca37da53-062b-4f61-a0f2-dbafe8ff0c7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Memory">
+      <UniqueIdentifier>{b4404dd9-a381-40da-995c-f2d1914c5462}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Inf Include="WinLibKernel.inf">
@@ -72,6 +78,9 @@
     <ClInclude Include="ldasm_defines.h">
       <Filter>Header Files\Lib</Filter>
     </ClInclude>
+    <ClInclude Include="cr0.h">
+      <Filter>Header Files\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
@@ -85,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="ldasm.cpp">
       <Filter>Resource Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="cr0.cpp">
+      <Filter>Resource Files\Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
