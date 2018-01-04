@@ -4,7 +4,7 @@
 #include "memory.h"
 #include "PEFile.h"
 
-namespace WinLib {
+namespace WinLibKernel {
 	namespace PE {
 		namespace Loader {
 			class MMapperDriver {

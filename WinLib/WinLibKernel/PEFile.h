@@ -4,7 +4,7 @@
 #include "Debug.h"
 #include "winstructs.h"
 
-namespace WinLib {
+namespace WinLibKernel {
 	namespace PE {
 		class PEFile {
 		private:

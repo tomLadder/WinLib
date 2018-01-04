@@ -1,6 +1,6 @@
 #include "PEFile.h"
 
-using WinLib::PE::PEFile;
+using WinLibKernel::PE::PEFile;
 
 PEFile::PEFile() {
 	this->rawData = nullptr;

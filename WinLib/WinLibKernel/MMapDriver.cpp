@@ -4,8 +4,8 @@
 
 NTSTATUS(*DriverEntry)(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath);
 
-using WinLib::PE::Loader::MMapperDriver;
-using WinLib::PE::PEFile;
+using WinLibKernel::PE::Loader::MMapperDriver;
+using WinLibKernel::PE::PEFile;
 
 MMapperDriver::MMapperDriver(PEFile* peFile) {
 	this->peFile = peFile;
@@ -19,7 +19,7 @@ MMapperDriver::STATUS MMapperDriver::map() {
 	OBJECT_HANDLE_INFORMATION handleInfo = { 0 };
 
 	union compilerHack {
-		WinLib::PE::Loader::MMapperDriver::STATUS(*func)(WinLib::PE::Loader::MMapperDriver* this_ptr);
+		WinLibKernel::PE::Loader::MMapperDriver::STATUS(*func)(WinLibKernel::PE::Loader::MMapperDriver* this_ptr);
 		PVOID addr;
 	};
 
@@ -199,35 +199,4 @@ bool MMapperDriver::executeMappedMemory() {
 	DriverEntry(NULL, NULL);
 
 	return true;
-}
-
-void LoaderStub(VOID* ldrParams) {
-	UNREFERENCED_PARAMETER(ldrParams);
-	//auto loaderParams = (LoaderParamsMMap*)(ldrParams);
-	//auto import_descriptor = (PIMAGE_IMPORT_DESCRIPTOR)((byte*)loaderParams->mapped_PE + loaderParams->imports_VA);
-
-	//while ((import_descriptor->OriginalFirstThunk != 0 || import_descriptor->OriginalFirstThunk != 0)) {
-	//	char* name = (char*)loaderParams->mapped_PE + import_descriptor->Name;
-
-	//	HMODULE module = loaderParams->addr_LoadLibrary(name);
-
-	//	if (import_descriptor->OriginalFirstThunk != 0) {
-	//		PIMAGE_THUNK_DATA64 image_thunk_data = (PIMAGE_THUNK_DATA64)((byte*)loaderParams->mapped_PE + import_descriptor->OriginalFirstThunk);
-	//		PIMAGE_THUNK_DATA64 first_thunk_data = (PIMAGE_THUNK_DATA64)((byte*)loaderParams->mapped_PE + import_descriptor->FirstThunk);
-	//		while (image_thunk_data->u1.AddressOfData != 0) {
-	//			PIMAGE_IMPORT_BY_NAME image_import_by_name = (PIMAGE_IMPORT_BY_NAME)((byte*)loaderParams->mapped_PE + image_thunk_data->u1.Ordinal);
-	//			FARPROC func = loaderParams->addr_GetProcAdress(module, image_import_by_name->Name);
-	//			first_thunk_data->u1.Function = (ULONGLONG)func;
-
-	//			first_thunk_data++;
-	//			image_thunk_data++;
-	//		}
-	//	}
-
-	//	import_descriptor++;
-	//}
-
-	//loaderParams->addr_DllMain((HINSTANCE)loaderParams->mapped_PE, DLL_PROCESS_ATTACH, 0);
-
-	return;
 }
