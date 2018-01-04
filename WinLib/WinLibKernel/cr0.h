@@ -8,6 +8,7 @@
 namespace WinLibKernel {
 	namespace Mem {
 		class cr0 {
+		public:
 			static KIRQL wp_off();
 			static VOID wp_on(KIRQL irql);
 		};
