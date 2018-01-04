@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/tomLadder/WinLib/master/img/windows.ico?token=ATcsxLIcXz0pWfzAVK-INEj4pNmUFkaPks5aTK68wA%3D%3D" align="left" width="192px" height="192px"/>
+<img src="https://github.com/tomLadder/WinLib/blob/master/img/windows.ico" align="left" width="192px" height="192px"/>
 <img align="left" width="0" height="192px" hspace="10"/>
 
 # WinLib
