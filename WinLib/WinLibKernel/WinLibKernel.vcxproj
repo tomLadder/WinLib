@@ -144,6 +144,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -155,6 +156,8 @@
   <ItemGroup>
     <ClInclude Include="cr0.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Detour.h" />
+    <ClInclude Include="Hook.h" />
     <ClInclude Include="ldasm.h" />
     <ClInclude Include="ldasm_defines.h" />
     <ClInclude Include="memory.h" />
@@ -164,6 +167,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cr0.cpp" />
+    <ClCompile Include="Detour.cpp" />
+    <ClCompile Include="Hook.cpp" />
     <ClCompile Include="ldasm.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="MMapDriver.cpp" />

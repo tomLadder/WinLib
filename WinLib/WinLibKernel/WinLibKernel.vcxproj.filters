@@ -50,6 +50,12 @@
     <Filter Include="Resource Files\Memory">
       <UniqueIdentifier>{b4404dd9-a381-40da-995c-f2d1914c5462}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Memory\Hook">
+      <UniqueIdentifier>{39b2d854-291f-4821-a8ed-5eaac125d68e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Memory\Hook">
+      <UniqueIdentifier>{9530d17e-acc3-44b6-9217-7d33a7d79a76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Inf Include="WinLibKernel.inf">
@@ -81,6 +87,12 @@
     <ClInclude Include="cr0.h">
       <Filter>Header Files\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Hook.h">
+      <Filter>Header Files\Memory\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="Detour.h">
+      <Filter>Header Files\Memory\Hook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
@@ -97,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="cr0.cpp">
       <Filter>Resource Files\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Detour.cpp">
+      <Filter>Resource Files\Memory\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook.cpp">
+      <Filter>Resource Files\Memory\Hook</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
