@@ -9,8 +9,8 @@ Detour::Detour(UINT8* src, UINT8* dst)
 }
 
 Detour::~Detour() {
-	//TODO
-	//Free all memory
+	if(this->isHooked)
+		delete this->trampoline;
 }
 
 void Detour::hook() {
@@ -47,6 +47,8 @@ void Detour::hook() {
 	}
 	
 	cr0::wp_on(kirql);
+
+	this->isHooked = TRUE;
 }
 
 void Detour::unhook() {
@@ -56,6 +58,8 @@ void Detour::unhook() {
 	delete trampoline;
 
 	cr0::wp_on(kirql);
+
+	this->isHooked = FALSE;
 }
 
 UINT8* Detour::getTrampoline() {
