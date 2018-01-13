@@ -3,6 +3,7 @@
 #include <ntddk.h>
 #include "Debug.h"
 #include "winstructs.h"
+#include "memory.h"
 
 namespace WinLibKernel {
 	namespace PE {
@@ -37,6 +38,9 @@ namespace WinLibKernel {
 			PIMAGE_SECTION_HEADER getSectionHeader();
 			PIMAGE_BASE_RELOCATION getBaseRelocation();
 			PIMAGE_IMPORT_DESCRIPTOR getImportDescriptor();
+
+			/* static */
+			static PEFile* loadFromFile(PWCHAR path);
 		};
 	}
 }

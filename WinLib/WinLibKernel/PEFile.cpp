@@ -7,6 +7,7 @@ PEFile::PEFile() {
 	this->rawDataSize = 0;
 	this->isInMemory = true;
 }
+
 PEFile::PEFile(char* rawData, int rawDataSize) {
 	this->rawData = rawData;
 	this->rawDataSize = rawDataSize;
@@ -104,4 +105,62 @@ PIMAGE_BASE_RELOCATION PEFile::getBaseRelocation() {
 
 PIMAGE_IMPORT_DESCRIPTOR PEFile::getImportDescriptor() {
 	return (PIMAGE_IMPORT_DESCRIPTOR)((DWORD64)this->ntHeader + sizeof(this->ntHeader) + (DWORD64)this->ntHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
+}
+
+/* static */
+
+//e.g. path=\\DosDevices\\C:\\WINDOWS\\example.txt
+PEFile* PEFile::loadFromFile(PWCHAR path) {
+	HANDLE fileHandle;
+	ACCESS_MASK desiredAccess = GENERIC_READ;
+	OBJECT_ATTRIBUTES objectAttributes;
+	IO_STATUS_BLOCK   ioStatusBlock;
+	ULONG fileAttributes = FILE_ATTRIBUTE_NORMAL;
+	ULONG createDisposition = FILE_OPEN;
+	ULONG createOptions = FILE_SYNCHRONOUS_IO_ALERT;
+	UNICODE_STRING uniPath;
+	NTSTATUS ntstatus;
+	IO_STATUS_BLOCK io_status_block = { 0 };
+	FILE_STANDARD_INFORMATION fileInformation = { 0 };
+	PVOID fileData;
+
+	RtlInitUnicodeString(&uniPath, path);
+	InitializeObjectAttributes(&objectAttributes, &uniPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
+
+	if (KeGetCurrentIrql() != PASSIVE_LEVEL)
+		return nullptr;
+
+	ntstatus = ZwCreateFile(&fileHandle,
+							desiredAccess, 
+							&objectAttributes, 
+							&ioStatusBlock,
+							NULL, 
+							fileAttributes, 0, 
+							createDisposition, 
+							createOptions, 
+							NULL, 0);
+
+	if (!NT_SUCCESS(ntstatus))
+		return nullptr;
+
+	ntstatus = ZwQueryInformationFile(fileHandle, &io_status_block, &fileInformation, sizeof(fileInformation), FileStandardInformation);
+
+	if (!NT_SUCCESS(ntstatus)) {
+		ZwClose(fileHandle);
+		return nullptr;
+	}
+
+	//Attention: the allocated memory has to be somewhere delted
+	fileData = ExAllocatePoolWithTag(PagedPool, fileInformation.EndOfFile.QuadPart, 'mmap');
+
+	ntstatus = ZwReadFile(fileHandle, NULL, NULL, NULL, &io_status_block, fileData, fileInformation.EndOfFile.LowPart, NULL, NULL);
+
+	if (!NT_SUCCESS(ntstatus)) {
+		ZwClose(fileHandle);
+		return nullptr;
+	}
+
+	ZwClose(fileHandle);
+
+	return new (NonPagedPool) PEFile(reinterpret_cast<PCHAR>(fileData), fileInformation.EndOfFile.LowPart);
 }
