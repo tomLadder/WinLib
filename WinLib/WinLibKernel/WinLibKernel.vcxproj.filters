@@ -23,38 +23,44 @@
     <Filter Include="Header Files\PE">
       <UniqueIdentifier>{e1439254-de24-4413-99c9-a51115e4253f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\PE">
-      <UniqueIdentifier>{a2f58b14-6ba9-40c6-abc2-2c292ca7a9f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Output">
       <UniqueIdentifier>{9bf3d206-3e4f-4058-8a0c-62739a25e871}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\PE\Loader">
       <UniqueIdentifier>{8410d502-195d-4628-b21f-02ee15937da3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\PE\Loader">
-      <UniqueIdentifier>{2a51dad2-415b-4810-bc73-c39979069d9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\std">
-      <UniqueIdentifier>{3ab6b104-155f-4417-86a8-c96303036cae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Lib">
       <UniqueIdentifier>{4cdd8bec-edd7-4a3b-95ae-dc0cf1ec4d6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Lib">
-      <UniqueIdentifier>{7fe015a9-0fba-4249-8953-ec692cdc5027}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Memory">
       <UniqueIdentifier>{ca37da53-062b-4f61-a0f2-dbafe8ff0c7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Memory">
-      <UniqueIdentifier>{b4404dd9-a381-40da-995c-f2d1914c5462}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Memory\Hook">
       <UniqueIdentifier>{39b2d854-291f-4821-a8ed-5eaac125d68e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Memory\Hook">
+    <Filter Include="Source Files\Lib">
+      <UniqueIdentifier>{7fe015a9-0fba-4249-8953-ec692cdc5027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory">
+      <UniqueIdentifier>{b4404dd9-a381-40da-995c-f2d1914c5462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Memory\Hook">
       <UniqueIdentifier>{9530d17e-acc3-44b6-9217-7d33a7d79a76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PE">
+      <UniqueIdentifier>{a2f58b14-6ba9-40c6-abc2-2c292ca7a9f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PE\Loader">
+      <UniqueIdentifier>{2a51dad2-415b-4810-bc73-c39979069d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\std">
+      <UniqueIdentifier>{3ab6b104-155f-4417-86a8-c96303036cae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NTOS">
+      <UniqueIdentifier>{60350336-ca94-4fac-9048-25935879da3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\NTOS">
+      <UniqueIdentifier>{fe81aae2-4ad4-4f18-a6c5-1ccdcb8fbb79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="PEFile.h">
       <Filter>Header Files\PE</Filter>
-    </ClInclude>
-    <ClInclude Include="winstructs.h">
-      <Filter>Header Files\std</Filter>
     </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>Header Files\Output</Filter>
@@ -93,28 +96,37 @@
     <ClInclude Include="Detour.h">
       <Filter>Header Files\Memory\Hook</Filter>
     </ClInclude>
+    <ClInclude Include="ntos.h">
+      <Filter>Header Files\NTOS</Filter>
+    </ClInclude>
+    <ClInclude Include="winstructs.h">
+      <Filter>Header Files\NTOS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
-      <Filter>Resource Files\PE</Filter>
+      <Filter>Source Files\PE</Filter>
     </ClCompile>
     <ClCompile Include="MMapDriver.cpp">
-      <Filter>Resource Files\PE\Loader</Filter>
+      <Filter>Source Files\PE\Loader</Filter>
     </ClCompile>
     <ClCompile Include="memory.cpp">
-      <Filter>Resource Files\std</Filter>
+      <Filter>Source Files\std</Filter>
     </ClCompile>
     <ClCompile Include="ldasm.cpp">
-      <Filter>Resource Files\Lib</Filter>
+      <Filter>Source Files\Lib</Filter>
     </ClCompile>
     <ClCompile Include="cr0.cpp">
-      <Filter>Resource Files\Memory</Filter>
+      <Filter>Source Files\Memory</Filter>
     </ClCompile>
     <ClCompile Include="Detour.cpp">
-      <Filter>Resource Files\Memory\Hook</Filter>
+      <Filter>Source Files\Memory\Hook</Filter>
     </ClCompile>
     <ClCompile Include="Hook.cpp">
-      <Filter>Resource Files\Memory\Hook</Filter>
+      <Filter>Source Files\Memory\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="ntos.cpp">
+      <Filter>Source Files\NTOS</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

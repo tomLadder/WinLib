@@ -150,7 +150,7 @@ PEFile* PEFile::loadFromFile(PWCHAR path) {
 		return nullptr;
 	}
 
-	//Attention: the allocated memory has to be somewhere delted
+	//Attention: the allocated memory has to be somewhere deleted
 	fileData = ExAllocatePoolWithTag(PagedPool, fileInformation.EndOfFile.QuadPart, 'mmap');
 
 	ntstatus = ZwReadFile(fileHandle, NULL, NULL, NULL, &io_status_block, fileData, fileInformation.EndOfFile.LowPart, NULL, NULL);

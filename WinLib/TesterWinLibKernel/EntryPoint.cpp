@@ -1,9 +1,11 @@
 #include <ntddk.h>
 #include <cr0.h>
 #include <Detour.h>
+#include <ntos.h>
 
 using WinLibKernel::Mem::cr0;
 using WinLibKernel::Mem::Hook::Detour;
+using WinLibKernel::NTOS::NTOS;
 
 Detour* detour;
 
@@ -27,12 +29,16 @@ VOID KernelMemManipulation() {
 	pDbgPrint = (dbgprint)detour->getTrampoline();
 }
 
+VOID GetModuleInformation() {
+	auto module_info = NTOS::GetSystemModuleInformation("\\SystemRoot\\system32\\ntoskrnl.exe");
+
+	if (module_info) {
+		delete module_info;
+	}
+}
+
 VOID OnUnload(IN PDRIVER_OBJECT DriverObject) {
 	UNREFERENCED_PARAMETER(DriverObject);
-
-	detour->unhook();
-
-	delete detour;
 
 	DbgPrint("=> OnUnload called");
 }
@@ -43,7 +49,8 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING Reg
 	DbgPrint("=> DriverEntry called");
 	DriverObject->DriverUnload = OnUnload;
 
-	KernelMemManipulation();
+	//KernelMemManipulation();
+	GetModuleInformation();
 
 	return STATUS_SUCCESS;
 }
