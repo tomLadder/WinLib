@@ -2,16 +2,12 @@
 <img align="left" width="0" height="192px" hspace="10"/>
 
 # WinLib
-> Windows Manipulation Library written in C++
-
-[![GitHub forks](https://img.shields.io/github/forks/tomLadder/OpenPass.svg?style=flat-square)](https://github.com/tomLadder/BitSync/network)
-[![GitHub stars](https://img.shields.io/github/stars/tomLadder/OpenPass.svg?style=flat-square)](https://github.com/tomLadder/BitSync/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/tomLadder/OpenPass.svg?style=flat-square)](https://github.com/tomLadder/BitSync/issues)<br>
+> Windows Manipulation Library written in C++<br>
 [![forthebadge](http://forthebadge.com/images/badges/powered-by-electricity.svg)](http://forthebadge.com)
 
 </br>
 </br>
-This library helps you manipulate the Windows NT - Operating System.
+This library helps you manipulate the Windows NT - Operating System. It supports Kernel and Usermode.
 
 <br>
 
