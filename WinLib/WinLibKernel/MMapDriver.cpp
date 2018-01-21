@@ -9,6 +9,12 @@ using WinLibKernel::PE::PEFile;
 
 MMapperDriver::MMapperDriver(PEFile* peFile) {
 	this->peFile = peFile;
+	this->driver_object = nullptr;
+}
+
+MMapperDriver::MMapperDriver(PEFile *peFile, PDRIVER_OBJECT driver_object) {
+	this->peFile = peFile;
+	this->driver_object = driver_object;
 }
 
 MMapperDriver::STATUS MMapperDriver::map() {
@@ -196,7 +202,10 @@ bool MMapperDriver::executeMappedMemory() {
 	auto entryPoint = (CHAR*)this->mapBase + this->peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
 
 	*(CHAR **)&DriverEntry = entryPoint;
-	DriverEntry(NULL, NULL);
+	if (this->driver_object)
+		DriverEntry(this->driver_object, NULL);
+	else
+		DriverEntry(NULL, NULL);
 
 	return true;
 }

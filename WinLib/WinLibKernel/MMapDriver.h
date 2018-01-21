@@ -17,11 +17,13 @@ namespace WinLibKernel {
 				};
 
 				MMapperDriver(PEFile *peFile);
+				MMapperDriver(PEFile *peFile, PDRIVER_OBJECT driver_object);
 				STATUS map();
 
 			private:
 				PEFile	*peFile;
 				PVOID	mapBase;
+				PDRIVER_OBJECT driver_object;
 
 				bool mapHeader();
 				bool mapSections();
