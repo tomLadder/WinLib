@@ -7,4 +7,9 @@ private:
 public:
 	IOCTLHijack(DRIVER_OBJECT *_victim);
 	BOOLEAN isHijackable();
+	/* 
+		==> TODO <== 
+		Parameter: Callback (Called from new KernelThread)
+						gets called if isHijackable gets TRUE
+	*/
 };
