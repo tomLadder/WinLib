@@ -37,20 +37,54 @@ VOID GetModuleInformation() {
 	}
 }
 
+typedef NTSTATUS(*DriverEntry)(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath);
+
+NTSTATUS HookedDriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath) {
+
+	return STATUS_SUCCESS;
+}
+
+VOID HijackIOCTL() {
+	//detour = new (NonPagedPool) Detour((UINT8*)addr, (UINT8*)&MyDbgPrint);
+	//detour->hook();
+}
+
 VOID OnUnload(IN PDRIVER_OBJECT DriverObject) {
 	UNREFERENCED_PARAMETER(DriverObject);
 
 	DbgPrint("=> OnUnload called");
 }
 
+void NotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE ProcessId, _In_ PIMAGE_INFO ImageInfo) {
+	UNREFERENCED_PARAMETER(ProcessId);
+	UNREFERENCED_PARAMETER(ImageInfo);
+	UNICODE_STRING uPath;
+	WCHAR path[] = L"\\??\\C:\\Users\\Thomas\\Desktop\\dokan2.sys";
+	RtlInitUnicodeString(&uPath, path);
+
+	PRINT("=> %wZ", FullImageName);
+
+	//if (RtlCompareUnicodeString(FullImageName, &uPath, TRUE) == FALSE) {
+	//	PRINT("=> dokan2.sys loaded");
+
+	//	auto peFile = new (NonPagedPool) PEFile((PCHAR)ImageInfo->ImageBase, (int)ImageInfo->ImageSize);
+	//	auto entryPoint = (CHAR*)ImageInfo->ImageBase + peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
+
+	//	detour = new (NonPagedPool) Detour((UINT8*)entryPoint, (UINT8*)&DokanEntry);
+	//	detour->hook();
+	//}
+}
+
 extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath) {
 	UNREFERENCED_PARAMETER(RegistryPath);
 
 	DbgPrint("=> DriverEntry called");
-	DriverObject->DriverUnload = OnUnload;
+	PsSetLoadImageNotifyRoutine(&NotifyRoutine);
+	//DriverObject->DriverUnload = OnUnload;
 
 	//KernelMemManipulation();
-	GetModuleInformation();
+	//GetModuleInformation();
+	//HijackIOCTL();
 
 	return STATUS_SUCCESS;
 }

@@ -158,6 +158,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Detour.h" />
     <ClInclude Include="Hook.h" />
+    <ClInclude Include="IOCTLHijack.h" />
     <ClInclude Include="ldasm.h" />
     <ClInclude Include="ldasm_defines.h" />
     <ClInclude Include="memory.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="cr0.cpp" />
     <ClCompile Include="Detour.cpp" />
     <ClCompile Include="Hook.cpp" />
+    <ClCompile Include="IOCTLHijack.cpp" />
     <ClCompile Include="ldasm.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="MMapDriver.cpp" />

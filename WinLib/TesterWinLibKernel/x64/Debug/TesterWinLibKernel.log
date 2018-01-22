@@ -1,0 +1,4 @@
+﻿  Building 'TesterWinLibKernel' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping x64\Debug\TesterWinLibKernel.inf [Version] section with DriverVer=01/22/2018,20.36.28.989
+  EntryPoint.cpp
+EntryPoint.cpp(2): fatal error C1083: Cannot open include file: 'cr0.h': No such file or directory
