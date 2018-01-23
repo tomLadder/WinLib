@@ -69,7 +69,10 @@ MMapperDriver::STATUS MMapperDriver::mapInternal(MMapperDriver* this_ptr) {
 		return FAILED;
 	}
 
+#pragma warning(push)
+#pragma warning(disable: 4995)
 	this_ptr->mapBase = MmGetSystemAddressForMdl(mdl);
+#pragma warning(pop)
 
 	if (!this_ptr->mapBase) {
 		MmFreePagesFromMdl(mdl);
