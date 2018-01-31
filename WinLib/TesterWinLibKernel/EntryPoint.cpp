@@ -40,14 +40,12 @@ VOID GetModuleInformation() {
 }
 
 typedef NTSTATUS(*_DriverEntry)(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath);
+_DriverEntry pDriverEntry;
 
 NTSTATUS HookedDriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath) {
-	UNREFERENCED_PARAMETER(DriverObject);
-	UNREFERENCED_PARAMETER(RegistryPath);
-
 	PRINT("=> HookedDriverEntry");
 
-	return STATUS_SUCCESS;
+	return pDriverEntry(DriverObject, RegistryPath);
 }
 
 VOID HijackIOCTL() {
@@ -73,16 +71,14 @@ void NotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE ProcessId
 	WCHAR path[] = L"\\??\\C:\\Users\\Thomas\\Desktop\\EasyAntiCheat.sys";
 	RtlInitUnicodeString(&uPath, path);
 
-	PRINT("=> %wZ", FullImageName);
-
 	if (RtlCompareUnicodeString(FullImageName, &uPath, TRUE) == FALSE) {
-		PRINT("=> dokan2.sys loaded");
-
 		auto peFile = new (NonPagedPool) PEFile((PCHAR)ImageInfo->ImageBase, (int)ImageInfo->ImageSize);
 		auto entryPoint = (CHAR*)ImageInfo->ImageBase + peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
 
 		detour = new (NonPagedPool) Detour((UINT8*)entryPoint, (UINT8*)&HookedDriverEntry);
 		detour->hook();
+
+		pDriverEntry = (_DriverEntry)detour->getTrampoline();
 	}
 }
 
