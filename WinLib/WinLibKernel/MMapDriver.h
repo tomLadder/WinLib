@@ -3,6 +3,7 @@
 #include "winstructs.h"
 #include "memory.h"
 #include "PEFile.h"
+#include "cr0.h"
 
 namespace WinLibKernel {
 	namespace PE {
@@ -19,6 +20,7 @@ namespace WinLibKernel {
 				MMapperDriver(PEFile *peFile);
 				MMapperDriver(PEFile *peFile, PDRIVER_OBJECT driver_object);
 				STATUS map();
+				PVOID map(PVOID targetBase, DWORD targetSize);
 
 			private:
 				PEFile	*peFile;
