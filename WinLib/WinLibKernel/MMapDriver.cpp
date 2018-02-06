@@ -26,12 +26,14 @@ PVOID MMapperDriver::map(PVOID targetBase, DWORD targetSize) {
 		return NULL;
 	}
 
+	auto kirql = WinLibKernel::Mem::cr0::wp_off();
 	this->mapBase = targetBase;
 
 	this->mapHeader();
 	this->mapSections();
 	this->baseRelocation(this->mapBase);
 	this->fixImports();
+	WinLibKernel::Mem::cr0::wp_on(kirql);
 
 	return (CHAR*)this->mapBase + this->peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
 }

@@ -3,6 +3,7 @@
 #include "winstructs.h"
 #include "memory.h"
 #include "PEFile.h"
+#include "cr0.h"
 
 namespace WinLibKernel {
 	namespace PE {

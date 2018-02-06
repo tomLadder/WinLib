@@ -99,7 +99,7 @@ void NotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE ProcessId
 
 	if (RtlCompareUnicodeString(FullImageName, &uPath, TRUE) == FALSE) {
 		base = ImageInfo->ImageBase;
-		imageSize = ImageInfo->ImageSize;
+		imageSize = (DWORD)ImageInfo->ImageSize;
 
 		auto peFile = new (NonPagedPool) PEFile((PCHAR)ImageInfo->ImageBase, (int)ImageInfo->ImageSize);
 		auto entryPoint = (CHAR*)ImageInfo->ImageBase + peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
