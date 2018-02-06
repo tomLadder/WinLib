@@ -3,11 +3,13 @@
 #include <Detour.h>
 #include <ntos.h>
 #include <PEFile.h>
+#include <MMapDriver.h>
 
 using WinLibKernel::Mem::cr0;
 using WinLibKernel::Mem::Hook::Detour;
 using WinLibKernel::NTOS::NTOS;
 using WinLibKernel::PE::PEFile;
+using WinLibKernel::PE::Loader::MMapperDriver;
 
 Detour* detour;
 
@@ -42,9 +44,33 @@ VOID GetModuleInformation() {
 typedef NTSTATUS(*_DriverEntry)(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath);
 _DriverEntry pDriverEntry;
 
+PVOID base;
+DWORD imageSize;
 NTSTATUS HookedDriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath) {
 	PRINT("=> HookedDriverEntry");
 
+	auto peFile = PEFile::loadFromFile(L"\\DosDevices\\C:\\Users\\Thomas\\Desktop\\EmptyDriver.sys");
+
+	if (peFile == nullptr) {
+		PRINT("=> PEFile::loadFromFile failed");
+		return STATUS_SUCCESS;
+	}
+
+	peFile->printInfos();
+
+	auto mmap = new (PagedPool) MMapperDriver(peFile, DriverObject);
+
+	PVOID entryPoint = mmap->map(base, imageSize);
+
+	if (entryPoint != NULL)
+		PRINT("=> sys manualmapped");
+	else
+		PRINT("=> manualmapping failed!");
+
+	delete mmap;
+	delete peFile;
+
+	pDriverEntry = (_DriverEntry)(entryPoint);
 	return pDriverEntry(DriverObject, RegistryPath);
 }
 
@@ -72,6 +98,9 @@ void NotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE ProcessId
 	RtlInitUnicodeString(&uPath, path);
 
 	if (RtlCompareUnicodeString(FullImageName, &uPath, TRUE) == FALSE) {
+		base = ImageInfo->ImageBase;
+		imageSize = ImageInfo->ImageSize;
+
 		auto peFile = new (NonPagedPool) PEFile((PCHAR)ImageInfo->ImageBase, (int)ImageInfo->ImageSize);
 		auto entryPoint = (CHAR*)ImageInfo->ImageBase + peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
 

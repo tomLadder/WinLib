@@ -19,6 +19,7 @@ namespace WinLibKernel {
 				MMapperDriver(PEFile *peFile);
 				MMapperDriver(PEFile *peFile, PDRIVER_OBJECT driver_object);
 				STATUS map();
+				PVOID map(PVOID targetBase, DWORD targetSize);
 
 			private:
 				PEFile	*peFile;
