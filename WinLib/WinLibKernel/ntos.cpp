@@ -35,10 +35,48 @@ PRTL_PROCESS_MODULE_INFORMATION NTOS::GetSystemModuleInformation(char* moduleNam
 					RtlCopyMemory(module, &currentModule, sizeof(RTL_PROCESS_MODULE_INFORMATION));
 				}
 			}
-		}
 
-		ExFreePool(prtl_process_modules);
+			ExFreePool(prtl_process_modules);
+		}
 	}
 
 	return module;
+}
+
+PUNICODE_STRING NTOS::GetProcessName(HANDLE pid) {
+	ULONG returnLength = 0;
+	UNICODE_STRING uFunction;
+	_ZwQueryInformationProcess pZwQueryInformationProcess = nullptr;
+	NTSTATUS status;
+	PUNICODE_STRING name = NULL;
+	PEPROCESS pEProcess;
+	HANDLE processHandle;
+
+	status = PsLookupProcessByProcessId(pid, &pEProcess);
+
+	if (!NT_SUCCESS(status) || !pEProcess) {
+		return nullptr;
+	}
+
+	status = ObOpenObjectByPointer(pEProcess, 0, NULL, 0, NULL, KernelMode, &processHandle);
+
+	if (!NT_SUCCESS(status) || !pEProcess) {
+		return nullptr;
+	}
+
+	RtlInitUnicodeString(&uFunction, L"ZwQueryInformationProcess");
+	pZwQueryInformationProcess = (_ZwQueryInformationProcess)MmGetSystemRoutineAddress(&uFunction);
+
+	if (!pZwQueryInformationProcess)
+		return nullptr;
+
+	status = pZwQueryInformationProcess(processHandle, PROCESSINFOCLASS::ProcessImageFileName, NULL, 0, &returnLength);
+
+	name = (PUNICODE_STRING)ExAllocatePoolWithTag(NonPagedPool, returnLength, 'winl');
+
+	if (name) {
+		status = pZwQueryInformationProcess(processHandle, PROCESSINFOCLASS::ProcessImageFileName, (PVOID)name, returnLength, 0);
+	}
+
+	return name;
 }
