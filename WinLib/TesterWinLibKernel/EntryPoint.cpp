@@ -113,17 +113,24 @@ using WinLibKernel::PE::Loader::MMapperDriver;
 
 void LoadImageNotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE ProcessId, _In_ PIMAGE_INFO ImageInfo) {
 	UNREFERENCED_PARAMETER(ImageInfo);
-	PUNICODE_STRING processPath;
-	//WCHAR path[] = L"\\??\\C:\\Users\\Thomas\\Desktop\\EasyAntiCheat.sys";
+	UNREFERENCED_PARAMETER(FullImageName);
+	PUNICODE_STRING notifyPath;
+	UNICODE_STRING uPathProcess, uPathDll;
 
-	PRINT("=> %wZ", FullImageName);
-	PRINT("=>     %d", ProcessId);
+	WCHAR wpathProcess[] = L"\\Device\\HarddiskVolume2\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Samples\\C++\\Direct3D11\\Bin\\x64\\EmptyProject11.exe";
+	WCHAR wpathDll[] = L"\\Fraps\\fraps64.dll";
 
-	processPath = NTOS::GetProcessName(ProcessId);
+	RtlInitUnicodeString(&uPathProcess, wpathProcess);
+	RtlInitUnicodeString(&uPathDll, wpathDll);
 
-	if(processPath)
-		PRINT("Name: %wZ", processPath);
-	
+	if (RtlCompareUnicodeString(FullImageName, &uPathDll, TRUE) == FALSE) {
+		notifyPath = NTOS::GetProcessName(ProcessId);
+		if (notifyPath) {
+			if (RtlCompareUnicodeString(notifyPath, &uPathProcess, TRUE) == FALSE) {
+				PRINT("=> found dll to hijack");
+			}
+		}
+	}
 }
 
 VOID OnUnload(IN PDRIVER_OBJECT DriverObject) {
