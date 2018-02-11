@@ -97,6 +97,7 @@ NTSTATUS NTOS::ReadProcessMemoryUserMode(PEPROCESS process, PVOID sourceAddr, PV
 NTSTATUS NTOS::WriteProcessMemoryUserMode(PEPROCESS process, PVOID sourceAddr, PVOID targetAdd, SIZE_T size) {
 	UNICODE_STRING uFunction;
 	SIZE_T resultSize;
+	NTSTATUS status;
 	_MmCopyVirtualMemory pMmCopyVirtualMemory = nullptr;
 
 	RtlInitUnicodeString(&uFunction, L"MmCopyVirtualMemory");
@@ -116,15 +117,16 @@ NTSTATUS NTOS::WriteProcessMemoryUserMode(PEPROCESS process, PVOID sourceAddr, P
 #pragma warning(pop)
 
 		MmProtectMdlSystemAddress(mdl, PAGE_EXECUTE_READWRITE);
-		pMmCopyVirtualMemory(sourceProcess, sourceAddr, targetProcess, targetAdd, size, KernelMode, &resultSize);
+
+		status = pMmCopyVirtualMemory(sourceProcess, sourceAddr, targetProcess, targetAdd, size, KernelMode, &resultSize);
 
 		MmUnmapLockedPages(targetAdd, mdl);
 		MmUnlockPages(mdl);
-		IoFreeMdl(mdl); // free MDL
+		IoFreeMdl(mdl);
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER) {
 		return STATUS_ACCESS_DENIED;
 	}
 
-	return pMmCopyVirtualMemory(sourceProcess, sourceAddr, targetProcess, targetAdd, size, KernelMode, &resultSize);
+	return status;
 }
