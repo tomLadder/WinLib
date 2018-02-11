@@ -80,3 +80,53 @@ PUNICODE_STRING NTOS::GetProcessName(HANDLE pid) {
 
 	return name;
 }
+
+NTSTATUS NTOS::ReadProcessMemoryUserMode(PEPROCESS process, PVOID sourceAddr, PVOID targetAdd, SIZE_T size) {
+	UNICODE_STRING uFunction;
+	SIZE_T resultSize;
+	_MmCopyVirtualMemory pMmCopyVirtualMemory = nullptr;
+
+	RtlInitUnicodeString(&uFunction, L"MmCopyVirtualMemory");
+	pMmCopyVirtualMemory = (_MmCopyVirtualMemory)MmGetSystemRoutineAddress(&uFunction);
+	PEPROCESS sourceProcess = process;
+	PEPROCESS targetProcess = PsGetCurrentProcess();
+
+	return pMmCopyVirtualMemory(sourceProcess, sourceAddr, targetProcess, targetAdd, size, KernelMode, &resultSize);
+}
+
+NTSTATUS NTOS::WriteProcessMemoryUserMode(PEPROCESS process, PVOID sourceAddr, PVOID targetAdd, SIZE_T size) {
+	UNICODE_STRING uFunction;
+	SIZE_T resultSize;
+	NTSTATUS status;
+	_MmCopyVirtualMemory pMmCopyVirtualMemory = nullptr;
+
+	RtlInitUnicodeString(&uFunction, L"MmCopyVirtualMemory");
+	pMmCopyVirtualMemory = (_MmCopyVirtualMemory)MmGetSystemRoutineAddress(&uFunction);
+	PEPROCESS sourceProcess = PsGetCurrentProcess();
+	PEPROCESS targetProcess = process;
+
+	//Disable MemoryProtection
+	PMDL mdl = IoAllocateMdl(targetAdd, (ULONG)size, FALSE, FALSE, NULL);
+
+	__try {
+		MmProbeAndLockPages(mdl, KernelMode, IoReadAccess);
+
+#pragma warning(push)
+#pragma warning(disable: 4995)
+		targetAdd = MmGetSystemAddressForMdl(mdl);
+#pragma warning(pop)
+
+		MmProtectMdlSystemAddress(mdl, PAGE_EXECUTE_READWRITE);
+
+		status = pMmCopyVirtualMemory(sourceProcess, sourceAddr, targetProcess, targetAdd, size, KernelMode, &resultSize);
+
+		MmUnmapLockedPages(targetAdd, mdl);
+		MmUnlockPages(mdl);
+		IoFreeMdl(mdl);
+	}
+	__except (EXCEPTION_EXECUTE_HANDLER) {
+		return STATUS_ACCESS_DENIED;
+	}
+
+	return status;
+}

@@ -1,5 +1,5 @@
 ﻿  Building 'WinLibKernel' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
-  Stamping x64\Debug\WinLibKernel.inf [Version] section with DriverVer=02/07/2018,20.21.11.618
+  Stamping x64\Debug\WinLibKernel.inf [Version] section with DriverVer=02/11/2018,14.46.58.241
   cr0.cpp
   Detour.cpp
   Hook.cpp
