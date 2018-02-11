@@ -150,6 +150,9 @@ void LoadImageNotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE 
 								if (!NT_SUCCESS(status)) {
 									PRINT("=> NTOS::WriteProcessMemory failed: 0x%x", status);
 								}
+
+								delete pe;
+								ExFreePool(buffer);
 							}
 						}
 					}
