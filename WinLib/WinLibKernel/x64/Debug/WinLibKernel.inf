@@ -8,7 +8,7 @@ Class=Sample ; TODO: edit Class
 ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
 Provider=%ManufacturerName%
 CatalogFile=WinLibKernel.cat
-DriverVer = 02/07/2018,20.21.11.618
+DriverVer = 02/11/2018,14.34.46.246
 
 [DestinationDirs]
 DefaultDestDir = 12

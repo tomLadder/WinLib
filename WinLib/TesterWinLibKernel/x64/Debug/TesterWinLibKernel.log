@@ -1,5 +1,5 @@
 ﻿  Building 'TesterWinLibKernel' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
-  Stamping x64\Debug\TesterWinLibKernel.inf [Version] section with DriverVer=02/08/2018,20.12.18.400
+  Stamping x64\Debug\TesterWinLibKernel.inf [Version] section with DriverVer=02/11/2018,14.34.53.0
   EntryPoint.cpp
   TesterWinLibKernel.vcxproj -> C:\Dev\WinLib\WinLib\x64\Debug\drv.sys
   Done Adding Additional Store

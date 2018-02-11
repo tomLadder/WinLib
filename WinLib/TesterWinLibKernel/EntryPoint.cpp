@@ -119,9 +119,10 @@ void LoadImageNotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE 
 	UNICODE_STRING uPathProcess, uPathDll;
 	NTSTATUS status;
 	PEPROCESS pEPROCESS = NULL;
-	PKAPC_STATE state = NULL;
+	KAPC_STATE state = {};
 	//PEFile* peFile = NULL;
-	CHAR BUFFER[1024];
+	PVOID buffer;
+	PEFile* pe = nullptr;
 
 	WCHAR wpathProcess[] = L"\\Device\\HarddiskVolume2\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Samples\\C++\\Direct3D11\\Bin\\x64\\EmptyProject11.exe";
 	WCHAR wpathDll[] = L"\\Fraps\\fraps64.dll";
@@ -133,11 +134,25 @@ void LoadImageNotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE 
 		notifyPath = NTOS::GetProcessName(ProcessId);
 		if (notifyPath) {
 			if (RtlCompareUnicodeString(notifyPath, &uPathProcess, TRUE) == FALSE) {
-				PRINT("=> found dll to hijack");
 				status = PsLookupProcessByProcessId(ProcessId, &pEPROCESS);
 				if (NT_SUCCESS(status)) {
-					KeStackAttachProcess(pEPROCESS, state);
-					RtlCopyMemory(BUFFER, ImageInfo->ImageBase, 100);
+					buffer = ExAllocatePoolWithTag(NonPagedPool, ImageInfo->ImageSize, 'winl');
+
+					if (buffer != NULL) {
+						if (NT_SUCCESS(NTOS::ReadProcessMemoryUserMode(pEPROCESS, ImageInfo->ImageBase, buffer, ImageInfo->ImageSize))) {
+							pe = new (NonPagedPool) PEFile((CHAR*)buffer, (int)ImageInfo->ImageSize);
+							if (pe) {
+								pe->printInfos();
+								auto entryPoint = (CHAR*)ImageInfo->ImageBase + pe->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
+
+								unsigned char patch = 0xC3;
+								status = NTOS::WriteProcessMemoryUserMode(pEPROCESS, &patch, entryPoint, sizeof(unsigned char));
+								if (!NT_SUCCESS(status)) {
+									PRINT("=> NTOS::WriteProcessMemory failed: 0x%x", status);
+								}
+							}
+						}
+					}
 				}
 			}
 		}
