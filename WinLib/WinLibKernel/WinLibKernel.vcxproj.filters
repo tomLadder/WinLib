@@ -111,6 +111,9 @@
     <ClInclude Include="IOCTLHijack.h">
       <Filter>Header Files\Communication</Filter>
     </ClInclude>
+    <ClInclude Include="MMapDll.h">
+      <Filter>Header Files\PE\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PEFile.cpp">
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="IOCTLHijack.cpp">
       <Filter>Source Files\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="MMapDll.cpp">
+      <Filter>Source Files\PE\Loader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

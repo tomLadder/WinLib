@@ -162,6 +162,7 @@
     <ClInclude Include="ldasm.h" />
     <ClInclude Include="ldasm_defines.h" />
     <ClInclude Include="memory.h" />
+    <ClInclude Include="MMapDll.h" />
     <ClInclude Include="MMapDriver.h" />
     <ClInclude Include="ntos.h" />
     <ClInclude Include="PEFile.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="IOCTLHijack.cpp" />
     <ClCompile Include="ldasm.cpp" />
     <ClCompile Include="memory.cpp" />
+    <ClCompile Include="MMapDll.cpp" />
     <ClCompile Include="MMapDriver.cpp" />
     <ClCompile Include="ntos.cpp" />
     <ClCompile Include="PEFile.cpp" />
