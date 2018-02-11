@@ -1,10 +1,6 @@
 ﻿  Building 'TesterWinLibKernel' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
-  Stamping x64\Debug\TesterWinLibKernel.inf [Version] section with DriverVer=02/11/2018,15.0.21.222
-  EntryPoint.cpp
+  Stamping x64\Debug\TesterWinLibKernel.inf [Version] section with DriverVer=02/11/2018,18.7.39.357
   TesterWinLibKernel.vcxproj -> C:\Dev\WinLib\WinLib\x64\Debug\drv.sys
-  Done Adding Additional Store
-  Successfully signed: C:\Dev\WinLib\WinLib\x64\Debug\drv.sys
-  
   Driver is a Universal Driver.
   ........................
   Signability test failed.
