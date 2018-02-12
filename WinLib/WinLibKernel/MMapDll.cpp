@@ -4,6 +4,7 @@
 
 using WinLibKernel::PE::Loader::MMapperDll;
 using WinLibKernel::PE::PEFile;
+using WinLibKernel::NTOS::NTOS;
 
 MMapperDll::MMapperDll(PEFile *peFile) {
 	this->peFile = peFile;
@@ -26,7 +27,7 @@ MMapperDll::STATUS MMapperDll::map(PEPROCESS process, PVOID originalEntryPoint, 
 	if (!MMapperDll::fixImports())
 		return STATUS::FAILED;
 
-	if (!MMapperDll::baseRelocation((ULONG_PTR)targetBase))
+	if (!MMapperDll::baseRelocation(targetBase))
 		return STATUS::FAILED;
 
 	if (!MMapperDll::writeToProcess(process, targetBase, targetSize))
@@ -41,7 +42,7 @@ MMapperDll::STATUS MMapperDll::map(PEPROCESS process, PVOID originalEntryPoint, 
 }
 
 bool MMapperDll::mapHeader() {
-	memcpy(this->payload, this->peFile->getDosHeader(), this->peFile->getHeaderSize());
+	RtlCopyMemory(this->payload, this->peFile->getDosHeader(), this->peFile->getHeaderSize());
 
 	return true;
 }
@@ -55,7 +56,7 @@ bool MMapperDll::mapSections() {
 			return false;
 		}
 
-		memcpy((CHAR*)this->payload + sectionHeader->VirtualAddress, rawData, sectionHeader->SizeOfRawData);
+		RtlCopyMemory((CHAR*)this->payload + sectionHeader->VirtualAddress, rawData, sectionHeader->SizeOfRawData);
 	}
 
 	return true;
@@ -120,7 +121,11 @@ bool MMapperDll::fixImports() {
 }
 
 bool MMapperDll::writeToProcess(PEPROCESS process, PVOID targetBase, DWORD targetSize) {
-	return true;
+	NTSTATUS status;
+
+	status = NTOS::NTOS::WriteProcessMemoryUserMode(process, this->payload, targetBase, targetSize);
+
+	return status == STATUS_SUCCESS;
 }
 
 bool patchEntryPoint(PVOID originalEntryPoint) {
