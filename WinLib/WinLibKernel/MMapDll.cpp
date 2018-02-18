@@ -33,15 +33,8 @@ MMapperDll::STATUS MMapperDll::map(PEPROCESS process, PVOID originalEntryPoint, 
 	if (!MMapperDll::writeToProcess(process, targetBase, targetSize))
 		return STATUS::FAILED;
 
-	if (!MMapperDll::patchEntryPoint(originalEntryPoint))
+	if (!MMapperDll::patchEntryPoint(process, targetBase, originalEntryPoint))
 		return STATUS::FAILED;
-
-	NTSTATUS status;
-	unsigned char patch = 0xC3;
-	status = NTOS::NTOS::WriteProcessMemoryUserMode(process, &patch, originalEntryPoint, sizeof(unsigned char));
-	if (!NT_SUCCESS(status)) {
-		PRINT("=> NTOS::WriteProcessMemory failed: 0x%x", status);
-	}
 
 	ExFreePool(this->payload);
 
@@ -137,8 +130,23 @@ bool MMapperDll::writeToProcess(PEPROCESS process, PVOID targetBase, DWORD64 tar
 	return status == STATUS_SUCCESS;
 }
 
-bool MMapperDll::patchEntryPoint(PVOID originalEntryPoint) {
-	UNREFERENCED_PARAMETER(originalEntryPoint);
+
+bool MMapperDll::patchEntryPoint(PEPROCESS process, PVOID targetBase, PVOID originalEntryPoint) {
+	PVOID dest;
+	UINT32 highPart;
+	const char* jmp_machine_code = "\x68\x00\x00\x00\x00\xC7\x44\x24\x04\x00\x00\x00\x00\xC3";
+
+	dest = (CHAR*)targetBase + this->peFile->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
+	highPart = (UINT32)((UINT64)dest >> 32);
+
+	if (!NT_SUCCESS(NTOS::NTOS::WriteProcessMemoryUserMode(process, (PVOID)jmp_machine_code, (CHAR*)originalEntryPoint, 14)))
+		return false;
+
+	if (!NT_SUCCESS(NTOS::NTOS::WriteProcessMemoryUserMode(process, (PVOID)&dest, (CHAR*)originalEntryPoint + 1, 4)))
+		return false;
+
+	if (!NT_SUCCESS(NTOS::NTOS::WriteProcessMemoryUserMode(process, (PVOID)&highPart, (CHAR*)originalEntryPoint + 9, 4)))
+		return false;
 
 	return true;
 }

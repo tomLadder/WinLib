@@ -2,6 +2,7 @@
 #include <ntifs.h>
 #include "PEFile.h"
 #include "ntos.h"
+#include "Detour.h"
 
 namespace WinLibKernel {
 	namespace PE {
@@ -27,7 +28,7 @@ namespace WinLibKernel {
 				bool baseRelocation(PVOID targetBase);
 				bool fixImports();
 				bool writeToProcess(PEPROCESS process, PVOID targetBase, DWORD64 targetSize);
-				bool patchEntryPoint(PVOID originalEntryPoint);
+				bool MMapperDll::patchEntryPoint(PEPROCESS process, PVOID targetBase, PVOID originalEntryPoint);
 
 				PIMAGE_BASE_RELOCATION processRelocation(ULONG_PTR address, ULONG count, PUSHORT typeOffset, LONGLONG delta);
 			};

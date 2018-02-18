@@ -155,7 +155,7 @@ void LoadImageNotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE 
 								PRINT("=> EntryPoint: 0x%X", entryPoint);
 
 								mmapper = new (NonPagedPool)MMapperDll(myPe);
-								if (mmapper->map(pEPROCESS, (PVOID)entryPoint, entryPoint + 1, myPe->getImageSize()) != MMapperDll::STATUS::SUCCESS) {
+								if (mmapper->map(pEPROCESS, (PVOID)entryPoint, (CHAR*)entryPoint + 14, myPe->getImageSize()) != MMapperDll::STATUS::SUCCESS) {
 									PRINT("=> MMapper failed!");
 								}
 
