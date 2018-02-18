@@ -10,7 +10,7 @@ MMapperDll::MMapperDll(PEFile *peFile) {
 	this->peFile = peFile;
 }
 
-MMapperDll::STATUS MMapperDll::map(PEPROCESS process, PVOID originalEntryPoint, PVOID targetBase, DWORD targetSize) {
+MMapperDll::STATUS MMapperDll::map(PEPROCESS process, PVOID originalEntryPoint, PVOID targetBase, DWORD64 targetSize) {
 	if (!this->peFile->isValid()) {
 		return PEINVALID;
 	}
@@ -35,6 +35,13 @@ MMapperDll::STATUS MMapperDll::map(PEPROCESS process, PVOID originalEntryPoint, 
 
 	if (!MMapperDll::patchEntryPoint(originalEntryPoint))
 		return STATUS::FAILED;
+
+	NTSTATUS status;
+	unsigned char patch = 0xC3;
+	status = NTOS::NTOS::WriteProcessMemoryUserMode(process, &patch, originalEntryPoint, sizeof(unsigned char));
+	if (!NT_SUCCESS(status)) {
+		PRINT("=> NTOS::WriteProcessMemory failed: 0x%x", status);
+	}
 
 	ExFreePool(this->payload);
 
@@ -120,14 +127,18 @@ bool MMapperDll::fixImports() {
 	return true;
 }
 
-bool MMapperDll::writeToProcess(PEPROCESS process, PVOID targetBase, DWORD targetSize) {
+bool MMapperDll::writeToProcess(PEPROCESS process, PVOID targetBase, DWORD64 targetSize) {
 	NTSTATUS status;
 
 	status = NTOS::NTOS::WriteProcessMemoryUserMode(process, this->payload, targetBase, targetSize);
 
+	PRINT("=> status: 0x%X", status);
+
 	return status == STATUS_SUCCESS;
 }
 
-bool patchEntryPoint(PVOID originalEntryPoint) {
+bool MMapperDll::patchEntryPoint(PVOID originalEntryPoint) {
+	UNREFERENCED_PARAMETER(originalEntryPoint);
+
 	return true;
 }

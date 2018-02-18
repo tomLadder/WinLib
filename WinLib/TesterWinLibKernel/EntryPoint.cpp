@@ -5,12 +5,14 @@
 #include <ntos.h>
 #include <PEFile.h>
 #include <MMapDriver.h>
+#include <MMapDll.h>
 
 using WinLibKernel::Mem::cr0;
 using WinLibKernel::Mem::Hook::Detour;
 using WinLibKernel::NTOS::NTOS;
 using WinLibKernel::PE::PEFile;
 using WinLibKernel::PE::Loader::MMapperDriver;
+using WinLibKernel::PE::Loader::MMapperDll;
 
 //Detour* detour;
 //
@@ -122,7 +124,9 @@ void LoadImageNotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE 
 	KAPC_STATE state = {};
 	//PEFile* peFile = NULL;
 	PVOID buffer;
-	PEFile* pe = nullptr;
+	PEFile* peLoading = nullptr;
+	PEFile* myPe = nullptr;
+	MMapperDll* mmapper = nullptr;
 
 	WCHAR wpathProcess[] = L"\\Device\\HarddiskVolume2\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\Samples\\C++\\Direct3D11\\Bin\\x64\\EmptyProject11.exe";
 	WCHAR wpathDll[] = L"\\Fraps\\fraps64.dll";
@@ -140,18 +144,24 @@ void LoadImageNotifyRoutine(_In_opt_ PUNICODE_STRING FullImageName, _In_ HANDLE 
 
 					if (buffer != NULL) {
 						if (NT_SUCCESS(NTOS::ReadProcessMemoryUserMode(pEPROCESS, ImageInfo->ImageBase, buffer, ImageInfo->ImageSize))) {
-							pe = new (NonPagedPool) PEFile((CHAR*)buffer, (int)ImageInfo->ImageSize);
-							if (pe) {
-								pe->printInfos();
-								auto entryPoint = (CHAR*)ImageInfo->ImageBase + pe->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
+							peLoading = new (NonPagedPool) PEFile((CHAR*)buffer, (int)ImageInfo->ImageSize);
+							if (peLoading) {
+								peLoading->printInfos();
+								auto entryPoint = (CHAR*)ImageInfo->ImageBase + peLoading->getNtHeader()->OptionalHeader.AddressOfEntryPoint;
 
-								unsigned char patch = 0xC3;
-								status = NTOS::WriteProcessMemoryUserMode(pEPROCESS, &patch, entryPoint, sizeof(unsigned char));
-								if (!NT_SUCCESS(status)) {
-									PRINT("=> NTOS::WriteProcessMemory failed: 0x%x", status);
+								myPe = PEFile::loadFromFile(L"\\DosDevices\\C:\\Users\\Thomas\\Desktop\\EmptyDll.dll");
+								myPe->printInfos();
+
+								PRINT("=> EntryPoint: 0x%X", entryPoint);
+
+								mmapper = new (NonPagedPool)MMapperDll(myPe);
+								if (mmapper->map(pEPROCESS, (PVOID)entryPoint, entryPoint + 1, myPe->getImageSize()) != MMapperDll::STATUS::SUCCESS) {
+									PRINT("=> MMapper failed!");
 								}
 
-								delete pe;
+								delete peLoading;
+								delete myPe;
+								delete mmapper;
 								ExFreePool(buffer);
 							}
 						}
