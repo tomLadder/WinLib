@@ -7,7 +7,7 @@
 
 </br>
 </br>
-This library helps you manipulate the Windows NT - Operating System. It supports Kernel and Usermode (Windows 10).
+This library helps you manipulate the Windows NT - Operating System. It supports Kernel and Usermode (Windows 10 x64).
 
 <br>
 
