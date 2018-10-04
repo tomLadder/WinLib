@@ -8,8 +8,9 @@
 </br>
 </br>
 This library helps you manipulate the Windows NT - Operating System. It supports Kernel and Usermode (Windows 10 x64).
+</br>
 
-<br>
+See also: [WinLibJS - Javascript/Typescript Wrapper](https://github.com/tomLadder/WinLibJS/README.md)
 
 ## Authors
 
